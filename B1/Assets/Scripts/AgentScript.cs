@@ -8,7 +8,9 @@ public class AgentScript : MonoBehaviour
 
     NavMeshAgent agent;
     private bool selected = false;
-    public Material agentColor;
+    public Material agentDeselected;
+    public Material agentSelected;
+    public Renderer agentColor;
 
 
     void Start()
@@ -28,9 +30,6 @@ public class AgentScript : MonoBehaviour
                 agent.destination = hit.point;
             }
         }
-
-        Debug.Log(selected);
-
     }
 
     //Detect if agent was clicked
@@ -42,13 +41,13 @@ public class AgentScript : MonoBehaviour
         if(selected == true)
         {
             selected = false;
-            agentColor.color = new Color(255, 0, 0, 255);
+            agentColor.material = agentDeselected;
         }
         //If the agent is not selected and is clicked, select the agent.
         else
         {
             selected = true;
-            agentColor.color = Color.green;
+            agentColor.material = agentSelected;
         }
 
     }
@@ -57,7 +56,7 @@ public class AgentScript : MonoBehaviour
     void OnApplicationQuit()
     {
         selected = false;
-        agentColor.color = new Color(255, 0, 0, 255);
+        agentColor.material = agentDeselected;
     }
 
 }

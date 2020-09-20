@@ -64,6 +64,7 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\AgentScript.cs" />
     <Compile Include="Assets\Scripts\CameraControls.cs" />
+    <Compile Include="Assets\Scripts\ObstacleScript.cs" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>C:/Users/chris/Desktop/CS-428/B1/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>
