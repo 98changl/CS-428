@@ -1,10 +1,12 @@
-d0910e9 was Race_Condition, 2 hours ago, message: Update README.md
-8b5f1c8 was lfigil, 8 hours ago, message: Update README.md
-eb25b5f was 98changl, 2 days ago, message: Create README.txt
-d394560 was 98changl, 2 days ago, message: Delete test.txt
-8ec5371 was 98changl, 2 days ago, message: Create README.md
-042a5e8 was 98changl, 2 days ago, message: Add files via upload
-0ddb248 was 98changl, 2 days ago, message: Delete README.txt
-e3f47d0 was 98changl, 2 days ago, message: Create README.txt
-fdc5cae was 98changl, 2 days ago, message: Create test.txt
-3c40976 was 98changl, 2 days ago, message: Create README.txt
+d84bda6 was Christopher Clemente, 2 minutes ago, message: Expanded the scene, as well as added mazes, ramps, levels and a nav mesh.
+82a90be was Christopher Clemente, 25 hours ago, message: Added blank scene with a camera script to move/look around.
+d0910e9 was Christopher Clemente, 31 hours ago, message: Update README.md
+8b5f1c8 was lfigil, 2 days ago, message: Update README.md
+eb25b5f was 98changl, 3 days ago, message: Create README.txt
+d394560 was 98changl, 4 days ago, message: Delete test.txt
+8ec5371 was 98changl, 4 days ago, message: Create README.md
+042a5e8 was 98changl, 4 days ago, message: Add files via upload
+0ddb248 was 98changl, 4 days ago, message: Delete README.txt
+e3f47d0 was 98changl, 4 days ago, message: Create README.txt
+fdc5cae was 98changl, 4 days ago, message: Create test.txt
+3c40976 was 98changl, 4 days ago, message: Create README.txt
