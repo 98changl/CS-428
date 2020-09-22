@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class PatrolMovement : MonoBehaviour
 {
-    float speed = 2.0f;
+    public float speed = 2.0f;
+
+    // Update is called once per frame
     void Update()
     {
         transform.position += Time.deltaTime * speed * Vector3.right;
@@ -12,13 +14,14 @@ public class PatrolMovement : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.CompareTag("agent"))
+        // If statement to make patrol bounce back and forth when collides with a wall.
+        if(other.gameObject.CompareTag("Agent"))
         {
-            speed = speed * 1;
+            speed *= 1;
         }
         else
         {
-            speed = speed * -1;
+            speed *= -1;
         }
     }
 }
