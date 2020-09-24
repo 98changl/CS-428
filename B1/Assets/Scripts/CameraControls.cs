@@ -60,7 +60,7 @@ public class CameraControls : MonoBehaviour
             transform.position += 0.05f * new Vector3(0, 1, 0);
         }
         //Move Down
-        if (Input.GetKey(KeyCode.LeftControl))
+        if (Input.GetKey(KeyCode.LeftShift))
         {
             transform.position += 0.05f * new Vector3(0, -1, 0);
         }

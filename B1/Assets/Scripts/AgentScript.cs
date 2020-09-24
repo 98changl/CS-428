@@ -35,7 +35,7 @@ public class AgentScript : MonoBehaviour
     //Detect if agent was clicked
     void OnMouseDown()
     {
-        //If the agent is not selected, set the color to red, else set it to red.
+        //If the agent is not selected, set the color to red, else set it to green.
 
         //If the agent is selected and was clicked again, deselect the agent.
         if(selected == true)
