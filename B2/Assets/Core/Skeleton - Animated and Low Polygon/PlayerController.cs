@@ -5,7 +5,7 @@ using System.Collections;
 
 public class PlayerController : MonoBehaviour
 {
-    public float speed;
+    private float speed;
 
     private float xAxis;
 
@@ -53,6 +53,7 @@ public class PlayerController : MonoBehaviour
 
         //Translate inputs to a vector and normalize movement speed
         Vector3 Movement = new Vector3(LeftRight, 3, ForwardBackward);
+        Movement *= speed;
         Movement.Normalize();
 
 
@@ -79,10 +80,18 @@ public class PlayerController : MonoBehaviour
 
         }
 
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            speed = 8;
+        }
+        else
+        {
+            speed = 4;
+        }
 
         //Watch movment axis for left right up down stuff
         Debug.Log(Movement.z);
-        animator.SetFloat("SpeedBlend", 1.66f * Movement.z, speedSmoothTime, Time.deltaTime);
+        animator.SetFloat("SpeedBlend", (0.50f * speed) * Movement.z, speedSmoothTime, Time.deltaTime);
     }
 
 
