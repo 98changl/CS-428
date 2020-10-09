@@ -46,7 +46,6 @@ public class PlayerController : MonoBehaviour
 
     private void Move()
     {
-
         //Scan axis for inputs
         float LeftRight = Input.GetAxisRaw("Horizontal");
         float ForwardBackward = Input.GetAxisRaw("Vertical");
@@ -81,9 +80,9 @@ public class PlayerController : MonoBehaviour
         }
 
 
-
-
-        Debug.Log(Controller.isGrounded);
+        //Watch movment axis for left right up down stuff
+        Debug.Log(Movement.z);
+        animator.SetFloat("SpeedBlend", 1.66f * Movement.z, speedSmoothTime, Time.deltaTime);
     }
 
 
