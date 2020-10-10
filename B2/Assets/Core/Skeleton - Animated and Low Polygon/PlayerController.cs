@@ -28,7 +28,6 @@ public class PlayerController : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         Controller = GetComponent<CharacterController>();
-        mainCameraTransform = Camera.main.transform;
     }
 
     // Update is called once per frame
@@ -50,6 +49,19 @@ public class PlayerController : MonoBehaviour
         float LeftRight = Input.GetAxisRaw("Horizontal");
         float ForwardBackward = Input.GetAxisRaw("Vertical");
 
+        if(LeftRight == 0 && ForwardBackward == 0)
+        {
+            animator.SetBool("isMoving", false);
+        }
+        else
+        {
+            animator.SetBool("isMoving", true);
+        }
+
+        Debug.Log(ForwardBackward * speed * .12f);
+
+        animator.SetFloat("x", LeftRight, .1f, Time.deltaTime);
+        animator.SetFloat("y", ForwardBackward * speed * .12f, .1f, Time.deltaTime);
 
         //Translate inputs to a vector and normalize movement speed
         Vector3 Movement = new Vector3(LeftRight, 3, ForwardBackward);
@@ -90,8 +102,8 @@ public class PlayerController : MonoBehaviour
         }
 
         //Watch movment axis for left right up down stuff
-        Debug.Log(Movement.z);
-        animator.SetFloat("SpeedBlend", (0.50f * speed) * Movement.z, speedSmoothTime, Time.deltaTime);
+        //Debug.Log(Movement.z);
+        //animator.SetFloat("SpeedBlend", (0.50f * speed) * Movement.z, speedSmoothTime, Time.deltaTime);
     }
 
 
