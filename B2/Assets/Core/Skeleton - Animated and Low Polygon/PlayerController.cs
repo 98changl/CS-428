@@ -8,16 +8,8 @@ public class PlayerController : MonoBehaviour
     private float speed;
     private float jumpAnimationBlend = 0;
     private float xAxis;
-
-    private float movementSpeed = 2f;
-    private float curentSpeed = 0f;
-    private float speedSmoothVelocity = 0f;
-    private float speedSmoothTime = 0.1f;
-    private float rotationSpeed = 0.1f;
     private float gravity = 3f;
     private Vector3 moveVector = Vector3.zero;
-
-    private Transform mainCameraTransform;
 
     Animator animator;
     CharacterController Controller;
@@ -68,11 +60,8 @@ public class PlayerController : MonoBehaviour
         Movement *= speed;
         Movement.Normalize();
 
-
         transform.localPosition += transform.TransformDirection(Movement * speed * Time.deltaTime);
 
-        //Vector3 moveVector;
-        //moveVector = Vector3.zero;
 
         //Check if character is grounded and add to gravity if it isnt
         if (Controller.isGrounded == false)
@@ -113,11 +102,6 @@ public class PlayerController : MonoBehaviour
             speed = 4;
         }
 
-        Debug.Log(jumpAnimationBlend);
-
-        //Watch movment axis for left right up down stuff
-        //Debug.Log(Movement.z);
-        //animator.SetFloat("SpeedBlend", (0.50f * speed) * Movement.z, speedSmoothTime, Time.deltaTime);
     }
 
 
