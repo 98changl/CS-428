@@ -1559,7 +1559,7 @@ ModelImporter:
       takeName: Take 001
       internalID: 7400012
       firstFrame: 627
-      lastFrame: 636
+      lastFrame: 638
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -4064,7 +4064,7 @@ ModelImporter:
       takeName: Take 001
       internalID: 7400042
       firstFrame: 1309
-      lastFrame: 1316
+      lastFrame: 1322
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -4230,8 +4230,8 @@ ModelImporter:
       name: JumpLoop
       takeName: Take 001
       internalID: 7400044
-      firstFrame: 1316
-      lastFrame: 1318
+      firstFrame: 1309
+      lastFrame: 1322
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -4398,7 +4398,7 @@ ModelImporter:
       takeName: Take 001
       internalID: 7400046
       firstFrame: 1318
-      lastFrame: 1322
+      lastFrame: 1321
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

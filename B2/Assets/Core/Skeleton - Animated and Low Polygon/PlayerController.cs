@@ -6,7 +6,7 @@ using System.Collections;
 public class PlayerController : MonoBehaviour
 {
     private float speed;
-
+    private float jumpAnimationBlend = 0;
     private float xAxis;
 
     private float movementSpeed = 2f;
@@ -92,6 +92,18 @@ public class PlayerController : MonoBehaviour
 
         }
 
+        if (Controller.isGrounded)
+        {
+            animator.SetBool("isAirborne", false);
+            jumpAnimationBlend = 0;
+        }
+        else
+        {
+            jumpAnimationBlend += 0.2f * Time.deltaTime;
+            animator.SetBool("isAirborne", true);
+            animator.SetFloat("Jump Blend", jumpAnimationBlend);
+        }
+
         if (Input.GetKey(KeyCode.LeftShift))
         {
             speed = 8;
@@ -100,6 +112,8 @@ public class PlayerController : MonoBehaviour
         {
             speed = 4;
         }
+
+        Debug.Log(jumpAnimationBlend);
 
         //Watch movment axis for left right up down stuff
         //Debug.Log(Movement.z);
