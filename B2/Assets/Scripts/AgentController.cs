@@ -5,7 +5,11 @@ using UnityEngine.AI;
 
 public class AgentController : MonoBehaviour
 {
-    //private bool selected = false;
+    public Material agentDeselected;
+    public Material agentSelected;
+    public Renderer agentColor;
+
+    private bool selected = false;
     private Vector2 smoothPos = Vector2.zero;
     private Vector2 velocity = Vector2.zero;
 
@@ -25,7 +29,7 @@ public class AgentController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButtonDown(1) && selected == true)
         {
             RaycastHit hit;
 
@@ -78,8 +82,7 @@ public class AgentController : MonoBehaviour
         transform.position = pos;
     }
 
-    /*
-    // Detect if agent was clicked
+    //Detect if agent was clicked
     void OnMouseDown()
     {
         //If the agent is not selected, set the color to red, else set it to green.
@@ -88,12 +91,15 @@ public class AgentController : MonoBehaviour
         if (selected == true)
         {
             selected = false;
+            agentColor.material = agentDeselected;
         }
         //If the agent is not selected and is clicked, select the agent.
         else
         {
             selected = true;
+            agentColor.material = agentSelected;
         }
+
     }
-    */
+
 }
