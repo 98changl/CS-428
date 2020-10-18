@@ -10,14 +10,13 @@ public class AgentController : MonoBehaviour
     public Renderer agentColor;
 
     private bool selected = false;
-    private bool blocked = false;
+    private bool jumping = false;
     private float speed;
     private float jumpAnimationBlend = 0;
     private float previousClick = 0f;
     private float timeBetweenClicks = 0.2f;
 
     public Vector2 velocity = Vector2.zero;
-    public Vector2 prev_velocity = Vector2.zero;
 
     Animator animator;
     NavMeshAgent agent;
@@ -59,6 +58,12 @@ public class AgentController : MonoBehaviour
         }
 
         Move();
+
+        // stops crowds from constantly moving
+        if (agent.velocity == Vector3.zero)
+        {
+            animator.SetBool("isMoving", false);
+        }
     }
 
     void Move()
@@ -66,7 +71,7 @@ public class AgentController : MonoBehaviour
         // set up position for ground plane
         Vector3 worldPos = agent.nextPosition - transform.position;
         Vector2 pos = new Vector2(Vector3.Dot(transform.right, worldPos), Vector3.Dot(transform.forward, worldPos));
-        
+
         if (pos.x > 0)
         {
             velocity.x = 1;
@@ -84,7 +89,7 @@ public class AgentController : MonoBehaviour
         {
             velocity.y = -1;
         }
-        
+
         bool moving = false;
         if (velocity.magnitude > 0.5f && agent.remainingDistance > agent.radius)
         {
@@ -105,43 +110,38 @@ public class AgentController : MonoBehaviour
         // move object to agent
         if (worldPos.magnitude > agent.radius)
         {
-            transform.position = agent.nextPosition - 0.9f * worldPos;
+            if (jumping)
+            {
+                //Debug.Log("Jumping");
+                Vector3 Jump = new Vector3(0, 5, 0);
+                Jump.Normalize();
+                transform.position = (agent.nextPosition - 0.9f * worldPos) + Jump;
+            }
+            else
+            {
+                transform.position = agent.nextPosition - 0.9f * worldPos;
+            }
         }
 
         Jump();
-        
-    }
-    /*
-    IEnumerator Blocked(Vector3 prevPos)
-    {
-        yield return new WaitForSeconds(0.3f);
-        
-        if (prevPos != transform.position)
-        {
-            blocked = true;
-            Debug.Log("Blocked");
-        }
-    }
-    */
 
+    }
+    
     void Jump()
     {
         if (agent.isOnOffMeshLink)
         {
             Debug.Log("Jump");
-            //velocity = Vector2.zero;
-            Vector3 Jump = new Vector3(0, 10, 0);
-            Jump.Normalize();
-            transform.localPosition += transform.TransformDirection(Jump * 30 * Time.deltaTime);
-
             jumpAnimationBlend += 0.2f * Time.deltaTime;
             animator.SetBool("isAirborne", true);
             animator.SetFloat("Jump Blend", jumpAnimationBlend);
+            jumping = true;
         }
         else
         {
             animator.SetBool("isAirborne", false);
             jumpAnimationBlend = 0;
+            jumping = false;
         }
     }
 
@@ -151,7 +151,7 @@ public class AgentController : MonoBehaviour
         pos.y = agent.nextPosition.y;
         transform.position = pos;
     }
-    
+
     //Detect if agent was clicked
     void OnMouseDown()
     {
@@ -171,24 +171,5 @@ public class AgentController : MonoBehaviour
         }
 
     }
-    /*
-    IEnumerator MultipleClicks()
-    {
-        float timer = 0f;
-        while (timer < timeBetween)
-        {
-            if (Input.GetMouseButtonDown(1) && selected == true)
-            {
-                Debug.Log("Run");
-                run = true;
-            }
-            else
-            {
-                Debug.Log("Walk");
-                run = false;
-            }
-        }
-        yield return null;
-    }
-    */
+
 }
