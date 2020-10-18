@@ -34,7 +34,7 @@ public class AgentController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(1) && selected == true)
+        if (Input.GetMouseButtonDown(0) && selected == true)
         {
             RaycastHit hit;
 
@@ -153,23 +153,25 @@ public class AgentController : MonoBehaviour
     }
 
     //Detect if agent was clicked
-    void OnMouseDown()
+    void OnMouseOver()
     {
-        //If the agent is not selected, set the color to red, else set it to green.
-
-        //If the agent is selected and was clicked again, deselect the agent.
-        if (selected == true)
+        // detect a right click when mouse is hovering over the collider
+        if (Input.GetMouseButtonDown(1))
         {
-            selected = false;
-            agentColor.material = agentDeselected;
+            //If the agent is selected and was clicked again, deselect the agent.
+            if (selected == true)
+            {
+                selected = false;
+                agentColor.material = agentDeselected;
+            }
+            //If the agent is not selected and is clicked, select the agent.
+            else
+            {
+                selected = true;
+                agentColor.material = agentSelected;
+            }
         }
-        //If the agent is not selected and is clicked, select the agent.
-        else
-        {
-            selected = true;
-            agentColor.material = agentSelected;
-        }
-
+        
     }
 
 }
