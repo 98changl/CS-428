@@ -55,6 +55,7 @@ public class PrismManager : MonoBehaviour
             prisms.Add(prismScript);
             prismObjects.Add(prism);
             prismColliding.Add(prismScript, false);
+
         }
 
         StartCoroutine(Run());
@@ -75,6 +76,9 @@ public class PrismManager : MonoBehaviour
 #endif
 
         #endregion
+
+        Debug.Log(prisms[1].points[1]);
+
     }
 
     IEnumerator Run()
@@ -118,7 +122,7 @@ public class PrismManager : MonoBehaviour
                 yield return checkPrisms;
             }
         }
-
+        //        Debug.Log(prisms[1].points[1]);
         yield break;
     }
 
@@ -127,16 +131,91 @@ public class PrismManager : MonoBehaviour
         var prismA = collision.a;
         var prismB = collision.b;
 
+        List<Vector3> points = new List<Vector3>();
         
-        collision.penetrationDepthVectorAB = Vector3.zero;
+        //Minkowski Difference--------------------------
+        foreach(var point1 in prismA.points)
+            foreach(var point2 in prismB.points)
+            {
+                var result = Vector3.zero;
+                result = point1 - point2;
+                points.Add(result);
+            }
+        //----------------------------------------------
 
-        return true;
+        var simplex = new List<Vector3>();
+        simplex.Add(points.Aggregate((a,b) => a.x < b.x ? a : b));
+        simplex.Add(points.Where(p => p != simplex[0]).Aggregate((a, b) => a.x > b.x ? a : b));
+
+        var intersecting = false;
+        do
+        {
+
+            if(simplex.Count == 3)
+            {
+                var simplexOrientation = Mathf.Sign(Vector3.Dot(Vector3.Cross(simplex[1] - simplex[0], Vector3.up), simplex[2] - simplex[0]));
+
+                var bounded = true;
+                Vector3? deletePoint = simplex[0];
+                for(int i = 0; i < 3; i++)
+                {
+                    var a = simplex[i];
+                    var b = simplex[(i + 1) % 3];
+
+                    var temp = Mathf.Sign(Vector3.Dot(Vector3.Cross(b-a, Vector3.up), Vector3.zero - a));
+                    if(temp != simplexOrientation)
+                    {
+                        bounded = false;
+                        deletePoint = simplex[(i + 2) % 3];
+                        break;
+                    }
+                }
+
+                if(bounded == true)
+                {
+                    intersecting = true;
+                    break;
+                }
+
+                if (deletePoint.HasValue)
+                {
+                    simplex.Remove(deletePoint.Value);
+                }
+
+            }
+
+            var dir = simplex[1] - simplex[0];
+            var tangent = Vector3.Cross(dir, Vector3.up);
+            var orientation = Mathf.Sign(Vector3.Dot(tangent, -simplex[0]));
+            var supportAxis = tangent * orientation;
+            var supportPoint = points.Aggregate((a, b) => Vector3.Dot(a, supportAxis) > Vector3.Dot(b, supportAxis) ? a : b);
+
+            if (!simplex.Contains(supportPoint))
+            {
+                simplex.Add(supportPoint);
+            }
+
+
+        }
+        while (simplex.Count == 3);
+
+        //Returns------------------------------------------------
+        collision.penetrationDepthVectorAB = Vector3.zero;
+        if(intersecting == true)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+        //--------------------------------------------------------
     }
-    
+
     #endregion
 
     #region Private Functions
-    
+
     private void ResolveCollision(PrismCollision collision)
     {
         var prismObjA = collision.a.prismObject;
