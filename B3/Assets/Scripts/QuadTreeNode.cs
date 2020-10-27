@@ -115,27 +115,38 @@ public class QuadTreeNode : MonoBehaviour
 
         // prism does not collide with current prism
         // checks if the node collides with a node colliding with this node
+
+        bool result = false;
         if (topLeft != null)
         {
-            return topLeft.insertNode(node);
+            result = topLeft.insertNode(node);
         }
+
+        if (result == true) // only one insert is performed
+            return result;
 
         if (bottomLeft != null)
         {
-            return bottomLeft.insertNode(node);
+            result = bottomLeft.insertNode(node);
         }
+
+        if (result == true) // only one insert is performed
+            return result;
 
         if (topRight != null)
         {
-            return topRight.insertNode(node);
+            result = topRight.insertNode(node);
         }
+
+        if (result == true) // only one insert is performed
+            return result;
 
         if (bottomRight != null)
         {
-            return bottomRight.insertNode(node);
+            result = bottomRight.insertNode(node);
         }
 
-        return false;
+        return result;
     }
 
     // checks whether the four corners of the prism square are inside the quadrant
