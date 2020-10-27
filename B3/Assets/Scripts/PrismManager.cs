@@ -113,6 +113,50 @@ public class PrismManager : MonoBehaviour
 
     private IEnumerable<PrismCollision> PotentialCollisions()
     {
+        /*
+        // potential collision with quad tree data structure
+        List<QuadTreeNode> nodes = new List<QuadTreeNode>();
+
+        // loop for inserting prisms into the QuadTree
+        for(int i = 0; i < prisms.Count; i++)
+        {
+            if (nodes.Count == 0) // initialize the list
+            {
+                nodes.Add(new QuadTreeNode(prisms[i]));
+            }
+            else
+            {
+                for (int j = 0; j < nodes.Count; j++)
+                {
+                    bool result = nodes[j].insertNode(prisms[i]);
+                    if (result == false) // none colliding prism
+                    {
+                        nodes.Add(new QuadTreeNode(prisms[i]));
+                    }
+                }
+            }
+        }
+
+        // loop for detecting prism collisions
+        for(int i = 0; i < prisms.Count; i++)
+        {
+            // average case log n, worst case n
+            for (int j = 0; j < nodes.Count; j++)
+            {
+                QuadTreeNode retrieve = nodes[j].hasCollision(prisms[i]);
+                if (retrieve != null) // there was a collision found in the tree
+                {
+                    var checkPrisms = new PrismCollision();
+                    checkPrisms.a = prisms[i];
+                    checkPrisms.b = retrieve.node;
+
+                    yield return checkPrisms;
+                }
+            }
+        }
+        yield break;
+        */
+        
         for (int i = 0; i < prisms.Count; i++) {
             for (int j = i + 1; j < prisms.Count; j++) {
                 var checkPrisms = new PrismCollision();
@@ -124,6 +168,7 @@ public class PrismManager : MonoBehaviour
         }
         //        Debug.Log(prisms[1].points[1]);
         yield break;
+        
     }
 
     private bool CheckCollision(PrismCollision collision)
