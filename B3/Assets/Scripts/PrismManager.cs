@@ -113,9 +113,13 @@ public class PrismManager : MonoBehaviour
 
     private IEnumerable<PrismCollision> PotentialCollisions()
     {
+        
         // quad tree data structure implementation
-        Vector3 topLeftBound = new Vector3(-prismRegionRadiusXZ, 0, prismRegionRadiusXZ);
-        Vector3 bottomRightBound = new Vector3(prismRegionRadiusXZ, 0, -prismRegionRadiusXZ);
+        Vector3 topLeftBound = new Vector3(-prismRegionRadiusXZ - 1, 0, prismRegionRadiusXZ + 1);
+        Vector3 bottomRightBound = new Vector3(prismRegionRadiusXZ + 1, 0, -prismRegionRadiusXZ - 1);
+
+        //Debug.Log("Top left:" + topLeftBound);
+        //Debug.Log("Bot right:" + bottomRightBound);
 
         QuadTreeNode root = new QuadTreeNode(topLeftBound, bottomRightBound);
         root.initializeTree(0, 3); // create all quadrants of the tree
@@ -140,7 +144,7 @@ public class PrismManager : MonoBehaviour
                     var checkPrisms = new PrismCollision();
                     checkPrisms.a = prisms[i];
                     checkPrisms.b = collisions[j];
-
+                    //Debug.Log("Collision found");
                     yield return checkPrisms;
                 }
             }

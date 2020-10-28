@@ -34,7 +34,7 @@ public class QuadTreeNode
     {
         if (depth == totalDepth)
         {
-            Debug.Log("Depth reached");
+            //Debug.Log("Depth reached");
             return;
         }
 
