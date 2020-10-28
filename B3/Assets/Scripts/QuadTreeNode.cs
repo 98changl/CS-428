@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class QuadTreeNode : MonoBehaviour
+public class QuadTreeNode
 {
     // Bounding Box (AABB)
     Vector3 topLeftBound;       // max
     Vector3 bottomRightBound;   // min
 
-    // Prism node
-    public Prism node;
+    // list of Prisms in the quadrant
+    public List<Prism> prisms;
 
     // QuadTree child nodes
     QuadTreeNode topLeft;
@@ -17,28 +17,26 @@ public class QuadTreeNode : MonoBehaviour
     QuadTreeNode bottomLeft;
     QuadTreeNode bottomRight;
 
-    public QuadTreeNode(Prism node)
+    public QuadTreeNode(Vector3 topLeftBound, Vector3 bottomRightBound)
     {
-        this.topLeftBound = getTopLeftOfNode(node);
-        this.bottomRightBound = getBottomRightOfNode(node);
-        this.node = node;
+        this.topLeftBound = topLeftBound;
+        this.bottomRightBound = bottomRightBound;
 
+        this.prisms = new List<Prism>();
         this.topLeft = null;
         this.topRight = null;
         this.bottomLeft = null;
         this.bottomRight = null;
     }
 
-    // returns true if node collides with another prism in the tree
-    // returns false if node collides with no prism in the tree or node is bad node
-    public bool insertNode(Prism node)
+    // creates the entire quadtree for the field
+    public void initializeTree(int depth, int totalDepth)
     {
-        if (node == null)
-            return false;
-
-        //bool result = false;
-        Vector3 topLeftBound = getTopLeftOfNode(node);
-        Vector3 bottomRightBound = getBottomRightOfNode(node);
+        if (depth == totalDepth)
+        {
+            Debug.Log("Depth reached");
+            return;
+        }
 
         Vector3 tempTopLeft = Vector3.zero;
         Vector3 tempBottomRight = Vector3.zero;
@@ -47,106 +45,81 @@ public class QuadTreeNode : MonoBehaviour
         tempTopLeft = this.topLeftBound;
         tempBottomRight.x = (this.topLeftBound.x + this.bottomRightBound.x) / 2;
         tempBottomRight.z = (this.topLeftBound.z + this.bottomRightBound.z) / 2;
-        if (pointIn(topLeftBound, bottomRightBound, tempTopLeft, tempBottomRight))
-        {
-            if (topLeft == null)
-            {
-                topLeft = new QuadTreeNode(node);
-            }
-            else
-            {
-                topLeft.insertNode(node);
-            }
-            return true;
-        }
+        topLeft = new QuadTreeNode(tempTopLeft, tempBottomRight);
+        topLeft.initializeTree(depth + 1, totalDepth);
 
         // in bottom right quadrant
         tempTopLeft.x = (this.topLeftBound.x + this.bottomRightBound.x) / 2;
         tempTopLeft.z = (this.topLeftBound.z + this.bottomRightBound.z) / 2;
         tempBottomRight = this.bottomRightBound;
-        if (pointIn(topLeftBound, bottomRightBound, tempTopLeft, tempBottomRight))
-        {
-            if (bottomRight == null)
-            {
-                bottomRight = new QuadTreeNode(node);
-            }
-            else
-            {
-                bottomRight.insertNode(node);
-            }
-            return true;
-        }
+        bottomRight = new QuadTreeNode(tempTopLeft, tempBottomRight);
+        bottomRight.initializeTree(depth + 1, totalDepth);
 
         // in bottom left quadrant
         tempTopLeft.x = topLeftBound.x;
         tempTopLeft.z = (this.topLeftBound.z + this.bottomRightBound.z) / 2;
         tempBottomRight.x = (this.topLeftBound.x + this.bottomRightBound.x) / 2;
         tempBottomRight.z = this.bottomRightBound.z;
-        if (pointIn(topLeftBound, bottomRightBound, tempTopLeft, tempBottomRight))
-        {
-            if (bottomLeft == null)
-            {
-                bottomLeft = new QuadTreeNode(node);
-            }
-            else
-            {
-                bottomLeft.insertNode(node);
-            }
-            return true;
-        }
+        bottomLeft = new QuadTreeNode(tempTopLeft, tempBottomRight);
+        bottomLeft.initializeTree(depth + 1, totalDepth);
 
         // in top right quadrant
         tempTopLeft.x = (this.topLeftBound.x + this.bottomRightBound.x) / 2;
         tempTopLeft.z = this.topLeftBound.z;
         tempBottomRight.x = bottomRightBound.x;
         tempBottomRight.z = (this.topLeftBound.z + this.bottomRightBound.z) / 2;
-        if (pointIn(topLeftBound, bottomRightBound, tempTopLeft, tempBottomRight))
+        topRight = new QuadTreeNode(tempTopLeft, tempBottomRight);
+        topRight.initializeTree(depth + 1, totalDepth);
+    }
+
+    // returns true if node collides with another prism in the tree
+    // returns false if node collides with no prism in the tree or node is bad node
+    public void insertNode(Prism node)
+    {
+        if (node == null)
+            return;
+
+        // get bounds for the prism node
+        Vector3 topLeftBound = getTopLeftOfNode(node);
+        Vector3 bottomRightBound = getBottomRightOfNode(node);
+
+        // in top left quadrant
+        if (topLeft != null)
         {
-            if (topRight == null)
+            if (pointIn(topLeftBound, bottomRightBound, topLeft.getTopLeftBound(), topLeft.getBottomRightBound()))
             {
-                topRight = new QuadTreeNode(node);
+                topLeft.insertNode(node);
             }
-            else
+        }
+
+        // in bottom right quadrant
+        if (bottomRight != null)
+        {
+            if (pointIn(topLeftBound, bottomRightBound, bottomRight.getTopLeftBound(), bottomRight.getBottomRightBound()))
+            {
+                bottomRight.insertNode(node);
+            }
+        }
+
+        // in bottom left quadrant
+        if (bottomLeft != null)
+        {
+            if (pointIn(topLeftBound, bottomRightBound, bottomLeft.getTopLeftBound(), bottomLeft.getBottomRightBound()))
+            {
+                bottomLeft.insertNode(node);
+            }
+        }
+
+        // in top right quadrant
+        if (topRight != null)
+        {
+            if (pointIn(topLeftBound, bottomRightBound, topRight.getTopLeftBound(), topRight.getBottomRightBound()))
             {
                 topRight.insertNode(node);
             }
-            return true;
         }
 
-        // prism does not collide with current prism
-        // checks if the node collides with a node colliding with this node
-
-        bool result = false;
-        if (topLeft != null)
-        {
-            result = topLeft.insertNode(node);
-        }
-
-        if (result == true) // only one insert is performed
-            return result;
-
-        if (bottomLeft != null)
-        {
-            result = bottomLeft.insertNode(node);
-        }
-
-        if (result == true) // only one insert is performed
-            return result;
-
-        if (topRight != null)
-        {
-            result = topRight.insertNode(node);
-        }
-
-        if (result == true) // only one insert is performed
-            return result;
-
-        if (bottomRight != null)
-        {
-            result = bottomRight.insertNode(node);
-        }
-
-        return result;
+        prisms.Add(node);
     }
 
     // checks whether the four corners of the prism square are inside the quadrant
@@ -191,11 +164,71 @@ public class QuadTreeNode : MonoBehaviour
         return false; // prism vectors not in quadrant
     }
 
+    public List<Prism> getCollisionList(Prism node)
+    {
+        List<Prism> collisions = new List<Prism>();
+        collisions.Add(node);
+
+        bool hasNode = false;
+        for (int i = 0; i < prisms.Count; i++)
+        {
+            if (samePrism(prisms[i], node))
+            {
+                hasNode = true;
+                break;
+            }
+        }
+        
+        // prism is not in the quadrant
+        if (hasNode == false)
+        {
+            return collisions;
+        }
+
+        // deepest node in the tree
+        if (topLeft == null)
+        {
+            return prisms;
+        }
+
+        List<Prism> results = new List<Prism>();
+        results = topLeft.getCollisionList(node);
+        if (results != null)
+        {
+            collisions.AddRange(results);
+            results = null; // reset the results list
+        }
+
+        results = bottomRight.getCollisionList(node);
+        if (results != null)
+        {
+            collisions.AddRange(results);
+            results = null; // reset the results list
+        }
+
+        results = bottomLeft.getCollisionList(node);
+        if (results != null)
+        {
+            collisions.AddRange(results);
+            results = null; // reset the results list
+        }
+
+        results = topRight.getCollisionList(node);
+        if (results != null)
+        {
+            collisions.AddRange(results);
+            results = null; // reset the results list
+        }
+
+        return collisions;
+    }
+
+    /*
     // returns quadtree node with the prism that collides with target
     // returns null if the node is not in the QuadTree
     public QuadTreeNode hasCollision(Prism node)
     {
-        /*
+        
         // point is not inside the bounds of this QuadTree
         if (!inBounds(point))
             return null;
@@ -203,7 +236,7 @@ public class QuadTreeNode : MonoBehaviour
         if (node != null)
             return node;
 
-        */
+        
         QuadTreeNode result = null;
 
         // searches child nodes for prism
@@ -247,7 +280,7 @@ public class QuadTreeNode : MonoBehaviour
         return result;
     }
 
-    /*
+    
     bool inBounds(Prism node)
     {
         Vector3 topLeftBound = getTopLeftOfNode(node);
@@ -260,17 +293,17 @@ public class QuadTreeNode : MonoBehaviour
         }
         return false;
     }
-
-    Vector3 getTopLeftBound()
+    */
+    public Vector3 getTopLeftBound()
     {
         return this.topLeftBound;
     }
 
-    Vector3 getBottomRightBound()
+    public Vector3 getBottomRightBound()
     {
         return this.bottomRightBound;
     }
-    */
+    
 
     // returns the top left bound of the prism (max)
     Vector3 getTopLeftOfNode(Prism node)
@@ -303,7 +336,7 @@ public class QuadTreeNode : MonoBehaviour
     }
 
     // compares this prism's points to node's points
-    bool samePrism(Prism a, Prism b)
+    public bool samePrism(Prism a, Prism b)
     {
         if (a.points.Length == b.points.Length)
         {

@@ -113,50 +113,42 @@ public class PrismManager : MonoBehaviour
 
     private IEnumerable<PrismCollision> PotentialCollisions()
     {
-        
-        // potential collision with quad tree data structure
-        List<QuadTreeNode> nodes = new List<QuadTreeNode>();
+        // quad tree data structure implementation
+        Vector3 topLeftBound = new Vector3(-prismRegionRadiusXZ, 0, prismRegionRadiusXZ);
+        Vector3 bottomRightBound = new Vector3(prismRegionRadiusXZ, 0, -prismRegionRadiusXZ);
 
-        // loop for inserting prisms into the QuadTree
-        for(int i = 0; i < prisms.Count; i++)
+        QuadTreeNode root = new QuadTreeNode(topLeftBound, bottomRightBound);
+        root.initializeTree(0, 3); // create all quadrants of the tree
+
+        // inserts prisms into tree
+        for (int i = 0; i < prisms.Count; i++)
         {
-            if (nodes.Count == 0) // initialize the list
-            {
-                nodes.Add(new QuadTreeNode(prisms[i]));
-            }
-            else
-            {
-                for (int j = 0; j < nodes.Count; j++)
-                {
-                    bool result = nodes[j].insertNode(prisms[i]);
-                    if (result == false) // none colliding prism
-                    {
-                        nodes.Add(new QuadTreeNode(prisms[i]));
-                    }
-                }
-            }
+            root.insertNode(prisms[i]);
         }
 
-        // loop for detecting prism collisions
-        for(int i = 0; i < prisms.Count; i++)
+        // checks for collisions
+        for (int i = 0; i < prisms.Count; i++)
         {
-            // average case log n, worst case n
-            for (int j = 0; j < nodes.Count; j++)
+            List<Prism> collisions = new List<Prism>();
+            collisions = root.getCollisionList(prisms[i]);
+
+            // compare prism[i] to list of collisions retrieved from root
+            for (int j = 0; j < collisions.Count; j++)
             {
-                QuadTreeNode retrieve = nodes[j].hasCollision(prisms[i]);
-                if (retrieve != null) // there was a collision found in the tree
+                if (!root.samePrism(prisms[i], collisions[j])) // this currently has duplicate collisions
                 {
                     var checkPrisms = new PrismCollision();
                     checkPrisms.a = prisms[i];
-                    checkPrisms.b = retrieve.node;
+                    checkPrisms.b = collisions[j];
 
                     yield return checkPrisms;
                 }
             }
         }
         yield break;
-        
+
         /*
+        
         for (int i = 0; i < prisms.Count; i++) {
             for (int j = i + 1; j < prisms.Count; j++) {
                 var checkPrisms = new PrismCollision();
