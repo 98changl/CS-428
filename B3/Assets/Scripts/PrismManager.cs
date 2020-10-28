@@ -113,7 +113,7 @@ public class PrismManager : MonoBehaviour
 
     private IEnumerable<PrismCollision> PotentialCollisions()
     {
-        /*
+        
         // potential collision with quad tree data structure
         List<QuadTreeNode> nodes = new List<QuadTreeNode>();
 
@@ -155,8 +155,8 @@ public class PrismManager : MonoBehaviour
             }
         }
         yield break;
-        */
         
+        /*
         for (int i = 0; i < prisms.Count; i++) {
             for (int j = i + 1; j < prisms.Count; j++) {
                 var checkPrisms = new PrismCollision();
@@ -168,7 +168,7 @@ public class PrismManager : MonoBehaviour
         }
         //        Debug.Log(prisms[1].points[1]);
         yield break;
-        
+        */
     }
 
     private bool CheckCollision(PrismCollision collision)
