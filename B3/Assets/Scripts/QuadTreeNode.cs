@@ -185,6 +185,9 @@ public class QuadTreeNode
             return collisions;
         }
 
+        // removes the searched node from the prisms list to improve prism manager efficiency
+        prisms.Remove(node);
+
         // deepest node in the tree
         if (topLeft == null)
         {

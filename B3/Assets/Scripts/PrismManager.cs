@@ -113,7 +113,6 @@ public class PrismManager : MonoBehaviour
 
     private IEnumerable<PrismCollision> PotentialCollisions()
     {
-        
         // quad tree data structure implementation
         Vector3 topLeftBound = new Vector3(-prismRegionRadiusXZ - 1, 0, prismRegionRadiusXZ + 1);
         Vector3 bottomRightBound = new Vector3(prismRegionRadiusXZ + 1, 0, -prismRegionRadiusXZ - 1);
@@ -122,7 +121,21 @@ public class PrismManager : MonoBehaviour
         //Debug.Log("Bot right:" + bottomRightBound);
 
         QuadTreeNode root = new QuadTreeNode(topLeftBound, bottomRightBound);
-        root.initializeTree(0, 3); // create all quadrants of the tree
+
+        // determine the depth of the coordinate grid for the QuadTree
+        int depth = 0;
+        while(true)
+        {
+            if (Mathf.Pow(4, depth) < prismCount)
+            {
+                depth = depth + 1;
+            }
+            else
+            {
+                break;
+            }
+        }
+        root.initializeTree(0, depth); // create all quadrants of the tree
 
         // inserts prisms into tree
         for (int i = 0; i < prisms.Count; i++)
