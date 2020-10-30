@@ -185,87 +185,178 @@ public class PrismManager : MonoBehaviour
         var prismA = collision.a;
         var prismB = collision.b;
 
-        List<Vector3> points = new List<Vector3>();
-        
+        List<Vector3> pointList = new List<Vector3>();
+
         //Minkowski Difference--------------------------
-        foreach(var point1 in prismA.points)
-            foreach(var point2 in prismB.points)
+        int pointsA = prismA.pointCount;
+        int pointsB = prismB.pointCount;
+        //Find the difference between the points in two potentially colliding polygons
+        for (int i = 0; i < pointsA; i++)
+        {
+            for (int j = 0; j < pointsB; j++)
             {
                 var result = Vector3.zero;
-                result = point1 - point2;
-                points.Add(result);
+                result = prismA.points[i] - prismB.points[j];
+                pointList.Add(result);
             }
+        }
         //----------------------------------------------
 
+        //GJK-------------------------------------------
         var simplex = new List<Vector3>();
-        simplex.Add(points.Aggregate((a,b) => a.x < b.x ? a : b));
-        simplex.Add(points.Where(p => p != simplex[0]).Aggregate((a, b) => a.x > b.x ? a : b));
+        simplex.Add(pointList.Aggregate((a, b) => a.x < b.x ? a : b));
+        simplex.Add(pointList.Where(p => p != simplex[0]).Aggregate((a, b) => a.x > b.x ? a : b));
 
-        var intersecting = false;
+        bool isIntersecting = false;
         do
         {
-
-            if(simplex.Count == 3)
+            if (simplex.Count == 3)
             {
                 var simplexOrientation = Mathf.Sign(Vector3.Dot(Vector3.Cross(simplex[1] - simplex[0], Vector3.up), simplex[2] - simplex[0]));
 
                 var bounded = true;
                 Vector3? deletePoint = simplex[0];
-                for(int i = 0; i < 3; i++)
+                for (int i = 0; i < 3; i++)
                 {
-                    var a = simplex[i];
-                    var b = simplex[(i + 1) % 3];
-
-                    var temp = Mathf.Sign(Vector3.Dot(Vector3.Cross(b-a, Vector3.up), Vector3.zero - a));
-                    if(temp != simplexOrientation)
+                    var temp = Mathf.Sign(Vector3.Dot(Vector3.Cross(simplex[(i + 1) % 3] - simplex[i], Vector3.up), Vector3.zero - simplex[i]));
+                    if (temp != simplexOrientation)
                     {
                         bounded = false;
                         deletePoint = simplex[(i + 2) % 3];
                         break;
                     }
                 }
-
-                if(bounded == true)
+                if (bounded == true)
                 {
-                    intersecting = true;
+                    isIntersecting = true;
                     break;
                 }
-
-                if (deletePoint.HasValue)
+                if (deletePoint.Value != null)
                 {
                     simplex.Remove(deletePoint.Value);
                 }
-
             }
-
-            var dir = simplex[1] - simplex[0];
-            var tangent = Vector3.Cross(dir, Vector3.up);
-            var orientation = Mathf.Sign(Vector3.Dot(tangent, -simplex[0]));
-            var supportAxis = tangent * orientation;
-            var supportPoint = points.Aggregate((a, b) => Vector3.Dot(a, supportAxis) > Vector3.Dot(b, supportAxis) ? a : b);
-
-            if (!simplex.Contains(supportPoint))
+            if (!simplex.Contains(FindSupportPoint(pointList, simplex)))
             {
-                simplex.Add(supportPoint);
+                simplex.Add(FindSupportPoint(pointList, simplex));
             }
-
-
         }
         while (simplex.Count == 3);
+        //----------------------------------------------
 
-        //Returns------------------------------------------------
-        collision.penetrationDepthVectorAB = Vector3.zero;
-        if(intersecting == true)
+        //EPA-------------------------------------------
+        Vector3 movement = new Vector3();
+
+        if (isIntersecting == true)
         {
+            if (PointToLine(simplex[0], simplex[1], simplex[2]) > 0)
+            {
+                var temp = simplex[0];
+                simplex[0] = simplex[1];
+                simplex[1] = temp;
+            }
+
+            var distToSimplexSegments = new List<float>();
+            for (int s = 0; s < simplex.Count; s++)
+            {
+                var a = simplex[s];
+                var b = simplex[(s + 1) % simplex.Count];
+                distToSimplexSegments.Add(Mathf.Abs(PointToLine(Vector3.zero, a, b)));
+            }
+
+            var minIndex = MinIndex(distToSimplexSegments);
+            var minDist = distToSimplexSegments[minIndex];
+
+            for (int i = 0; i < 100000; i++)
+            {
+                if (simplex.Contains(epaSupportPoint(pointList, simplex, minIndex)))
+                {
+                    break;
+                }
+                else
+                {
+                    var ind = (minIndex + 1) % simplex.Count;
+                    simplex.Insert(ind, epaSupportPoint(pointList, simplex, minIndex));
+                    distToSimplexSegments.Insert(ind, float.MaxValue);
+
+                    minIndex = MinIndex(distToSimplexSegments);
+
+                    for (int s = minIndex; s <= minIndex + 1; s++)
+                    {
+                        var a = simplex[(s) % simplex.Count];
+                        var b = simplex[(s + 1) % simplex.Count];
+                        distToSimplexSegments[(s) % simplex.Count] = Mathf.Abs(PointToLine(Vector3.zero, a, b));
+                    }
+                    minIndex = MinIndex(distToSimplexSegments);
+                    minDist = distToSimplexSegments[minIndex];
+                    //Output pen depth
+                    movement = simplex[minIndex] + simplex[(minIndex + 1) % simplex.Count] / 2;
+                }
+
+            }
+
+        }
+        //Returns------------------------------------------------
+        if (isIntersecting == true)
+        {
+            collision.penetrationDepthVectorAB = movement * 1.44f;
             return true;
         }
         else
         {
+            collision.penetrationDepthVectorAB = Vector3.zero;
             return false;
         }
         //--------------------------------------------------------
     }
 
+    private Vector3 epaSupportPoint(List<Vector3> pointList, List<Vector3> simplex, int minIndex)
+    {
+        var tangent = Vector3.Cross(simplex[(minIndex + 1) % simplex.Count] - simplex[minIndex], Vector3.up);
+        var orientation = -Mathf.Sign(Vector3.Dot(tangent, -simplex[minIndex]));
+        var supportAxis = (Vector3.Cross(simplex[(minIndex + 1) % simplex.Count] - simplex[minIndex], Vector3.up)) * (-Mathf.Sign(Vector3.Dot(tangent, -simplex[minIndex])));
+        return pointList.Aggregate((a, b) => Vector3.Dot(a, supportAxis) > Vector3.Dot(b, supportAxis) ? a : b);
+    }
+
+    private Vector3 FindSupportPoint(List<Vector3> points, List<Vector3> simplex)
+    {
+        var supportAxis = (Vector3.Cross(simplex[1] - simplex[0], Vector3.up)) * (Mathf.Sign(Vector3.Dot(Vector3.Cross(simplex[1] - simplex[0], Vector3.up), -simplex[0])));
+        return points.Aggregate((a, b) => Vector3.Dot(a, supportAxis) > Vector3.Dot(b, supportAxis) ? a : b);
+    }
+
+    private Vector3 PointToLineTangent(Vector3 p, Vector3 a, Vector3 b)
+    {
+        var newVec = p - a;
+        var dir = b - a;
+        var tangent = Vector3.Cross(dir, Vector3.up);
+
+        var result = Vector3.Dot(newVec, tangent) / (newVec.magnitude) * newVec.magnitude;
+        return tangent * result;
+    }
+
+    private float PointToLine(Vector3 p, Vector3 a, Vector3 b)
+    {
+        var newVec = p - a;
+        var dir = b - a;
+        var tangent = Vector3.Cross(dir, Vector3.up).normalized;
+
+        var result = Vector3.Dot(newVec, tangent) / (newVec.magnitude) * newVec.magnitude;
+        return result;
+    }
+    private int MinIndex(List<float> a)
+    {
+        int lowest = 0;
+        float current = a[0];
+        for (int i = 0; i < a.Count; i++)
+        {
+            if (a[i] < current)
+            {
+                current = a[i];
+                lowest = i;
+            }
+        }
+        return lowest;
+    }
     #endregion
 
     #region Private Functions
