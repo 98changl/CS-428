@@ -125,6 +125,7 @@ public class QuadTreeNode
     // checks whether the four corners of the prism square are inside the quadrant
     bool pointIn(Vector3 prismTopLeft, Vector3 prismBottomRight, Vector3 quadTopLeft, Vector3 quadBottomRight)
     {
+        /*
         Vector3 prismTopRight = Vector3.zero;
         prismTopRight.x = prismBottomRight.x;
         prismTopRight.z = prismTopLeft.z;
@@ -160,6 +161,31 @@ public class QuadTreeNode
         {
             return true;
         }
+        */
+
+        // top edge
+        if (prismTopLeft.z <= quadTopLeft.z && prismTopLeft.z >= quadBottomRight.z)
+        {
+            return true;
+        }
+
+        // bottom edge
+        if (prismBottomRight.z <= quadTopLeft.z && prismBottomRight.z >= quadBottomRight.z)
+        {
+            return true;
+        }
+
+        // left edge
+        if (prismTopLeft.x >= quadTopLeft.x && prismTopLeft.x <= quadBottomRight.x)
+        {
+            return true;
+        }
+
+        // right edge
+        if (prismBottomRight.x >= quadTopLeft.x && prismBottomRight.x <= quadBottomRight.x)
+        {
+            return true;
+        }
 
         return false; // prism vectors not in quadrant
     }
@@ -167,7 +193,7 @@ public class QuadTreeNode
     public List<Prism> getCollisionList(Prism node)
     {
         List<Prism> collisions = new List<Prism>();
-        collisions.Add(node);
+        //collisions.Add(node);
 
         bool hasNode = false;
         for (int i = 0; i < prisms.Count; i++)
@@ -226,77 +252,6 @@ public class QuadTreeNode
         return collisions;
     }
 
-    /*
-    // returns quadtree node with the prism that collides with target
-    // returns null if the node is not in the QuadTree
-    public QuadTreeNode hasCollision(Prism node)
-    {
-        
-        // point is not inside the bounds of this QuadTree
-        if (!inBounds(point))
-            return null;
-
-        if (node != null)
-            return node;
-
-        
-        QuadTreeNode result = null;
-
-        // searches child nodes for prism
-        if (topLeft != null)
-        {
-            if (samePrism(node, topLeft.node)) // parent and child are colliding
-            {
-                return this;
-            }
-            result = hasCollision(node);
-        }
-
-        if (bottomRight != null)
-        {
-            if (samePrism(node, bottomRight.node)) // parent and child are colliding
-            {
-                return this;
-            }
-            result = hasCollision(node);
-        }
-
-        if (bottomLeft != null)
-        {
-            if (samePrism(node, bottomLeft.node)) // parent and child are colliding
-            {
-                return this;
-            }
-            result = hasCollision(node);
-        }
-
-        if (topRight != null)
-        {
-            if (samePrism(node, topRight.node)) // parent and child are colliding
-            {
-                return this;
-            }
-            result = hasCollision(node);
-        }
-
-        // null if prism not in tree
-        return result;
-    }
-
-    
-    bool inBounds(Prism node)
-    {
-        Vector3 topLeftBound = getTopLeftOfNode(node);
-        Vector3 bottomRightBound = getBottomRightOfNode(node);
-
-        if (topLeftBound.x >= this.topLeftBound.x && bottomRightBound.x <= this.bottomRightBound.x &&
-            topLeftBound.z <= this.topLeftBound.z && bottomRightBound.z >= this.bottomRightBound.z)
-        {
-            return true;
-        }
-        return false;
-    }
-    */
     public Vector3 getTopLeftBound()
     {
         return this.topLeftBound;
