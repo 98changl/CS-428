@@ -295,7 +295,7 @@ public class PrismManager : MonoBehaviour
         //Returns------------------------------------------------
         if (isIntersecting == true)
         {
-            collision.penetrationDepthVectorAB = movement * 1.44f;
+            collision.penetrationDepthVectorAB = movement * 1.444f;
             return true;
         }
         else
