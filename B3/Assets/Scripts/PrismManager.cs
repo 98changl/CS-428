@@ -159,21 +159,6 @@ public class PrismManager : MonoBehaviour
             }
         }
         yield break;
-
-        /*
-        
-        for (int i = 0; i < prisms.Count; i++) {
-            for (int j = i + 1; j < prisms.Count; j++) {
-                var checkPrisms = new PrismCollision();
-                checkPrisms.a = prisms[i];
-                checkPrisms.b = prisms[j];
-
-                yield return checkPrisms;
-            }
-        }
-        //        Debug.Log(prisms[1].points[1]);
-        yield break;
-        */
     }
 
     private bool CheckCollision(PrismCollision collision)
@@ -199,98 +184,148 @@ public class PrismManager : MonoBehaviour
         //----------------------------------------------
 
         //GJK-------------------------------------------
+
+        //Initialize simplex
         var simplex = new List<Vector3>();
-        simplex.Add(pointList.Aggregate((a, b) => a.x < b.x ? a : b));
-        simplex.Add(pointList.Where(p => p != simplex[0]).Aggregate((a, b) => a.x > b.x ? a : b));
+        simplex.Add(pointList.Aggregate((point1, point2) => point1.x < point2.x ? point1 : point2));
+        simplex.Add(pointList.Where(p => p != simplex[0]).Aggregate((point1, point2) => point1.x > point2.x ? point1 : point2));
 
         bool isIntersecting = false;
-        do
+
+        int counter = 3;
+        while (counter == 3)
         {
             if (simplex.Count == 3)
             {
                 var simplexOrientation = Mathf.Sign(Vector3.Dot(Vector3.Cross(simplex[1] - simplex[0], Vector3.up), simplex[2] - simplex[0]));
-
-                var bounded = true;
-                Vector3? deletePoint = simplex[0];
+                //Compare orientation of the simplex to the orientation of the dot product of the different points in the simplex
+                bool contains = true;
+                Vector3? pointRemoval = simplex[0];
                 for (int i = 0; i < 3; i++)
                 {
-                    var temp = Mathf.Sign(Vector3.Dot(Vector3.Cross(simplex[(i + 1) % 3] - simplex[i], Vector3.up), Vector3.zero - simplex[i]));
-                    if (temp != simplexOrientation)
+                    //If the orientations are not equal then the point is removed from the simplex
+                    var orientationCompare = Mathf.Sign(Vector3.Dot(Vector3.Cross(getNextArrayPoint(simplex, i, 1) - simplex[i], Vector3.up), Vector3.zero - simplex[i]));
+                    if (orientationCompare != simplexOrientation)
                     {
-                        bounded = false;
-                        deletePoint = simplex[(i + 2) % 3];
-                        break;
+                        pointRemoval = getNextArrayPoint(simplex, i, 2);
+                        contains = false;
                     }
                 }
-                if (bounded == true)
+                //If the origin is contained then set 
+                if (contains == true)
                 {
                     isIntersecting = true;
                     break;
                 }
-                if (deletePoint.Value != null)
+                //Remove point from simplex
+                if (pointRemoval.Value != null)
                 {
-                    simplex.Remove(deletePoint.Value);
+                    simplex.Remove(pointRemoval.Value);
                 }
             }
+            //Add support point into simplex when found
             if (!simplex.Contains(FindSupportPoint(pointList, simplex)))
             {
                 simplex.Add(FindSupportPoint(pointList, simplex));
             }
+
+            counter = simplex.Count;
+
         }
-        while (simplex.Count == 3);
-        //----------------------------------------------
+        //----------------------------------------------*
 
         //EPA-------------------------------------------
+
+        //Create new movement vector to move prisms
         Vector3 movement = new Vector3();
-
-        if (isIntersecting == true)
+        
+        //If the prisms arent intersecting dont compute penetration depth
+        if (isIntersecting != false)
         {
-            if (PointToLine(simplex[0], simplex[1], simplex[2]) > 0)
+            var tanToLine = Vector3.Cross((simplex[2]-simplex[1]), Vector3.up);
+            var product = Vector3.Dot(simplex[0]-simplex[1], tanToLine.normalized);
+
+            //Switch simplex points if dot product is greater than 0
+            if (product > 0)
             {
-                var temp = simplex[0];
+                var holder = simplex[0];
                 simplex[0] = simplex[1];
-                simplex[1] = temp;
+                simplex[1] = holder;
             }
 
-            var distToSimplexSegments = new List<float>();
-            for (int s = 0; s < simplex.Count; s++)
+            //Find triple product of simplex points
+            List<float> lineSegmentDistance = new List<float>();
+            for (int i = 0; i < 3; i++)
             {
-                var a = simplex[s];
-                var b = simplex[(s + 1) % simplex.Count];
-                distToSimplexSegments.Add(Mathf.Abs(PointToLine(Vector3.zero, a, b)));
+                tanToLine = Vector3.Cross((getNextArrayPoint(simplex, i, 1) - simplex[i]), Vector3.up);
+                product = Vector3.Dot(Vector3.zero - simplex[i], tanToLine.normalized);
+                lineSegmentDistance.Add(Mathf.Abs(product));
             }
 
-            var minIndex = MinIndex(distToSimplexSegments);
-            var minDist = distToSimplexSegments[minIndex];
-
-            for (int i = 0; i < 100000; i++)
+            //Find index of the smallest float point
+            int lowest = 0;
+            float current = lineSegmentDistance[0];
+            for (int i = 0; i < lineSegmentDistance.Count; i++)
             {
-                if (simplex.Contains(epaSupportPoint(pointList, simplex, minIndex)))
+                if (lineSegmentDistance[i] < current)
+                {
+                    current = lineSegmentDistance[i];
+                    lowest = i;
+                }
+            }
+            int SmallestIndexPoint = lowest;
+
+            while(true)
+            {
+                //Break out of infinite loop if the support point is contained in the simplex
+                if (simplex.Contains(epaSupportPoint(pointList, simplex, SmallestIndexPoint)))
                 {
                     break;
                 }
                 else
                 {
-                    var ind = (minIndex + 1) % simplex.Count;
-                    simplex.Insert(ind, epaSupportPoint(pointList, simplex, minIndex));
-                    distToSimplexSegments.Insert(ind, float.MaxValue);
-
-                    minIndex = MinIndex(distToSimplexSegments);
-
-                    for (int s = minIndex; s <= minIndex + 1; s++)
+                    //Insert support point into simplex if its not contained already
+                    int point = (SmallestIndexPoint + 1) % simplex.Count;
+                    simplex.Insert(point, epaSupportPoint(pointList, simplex, SmallestIndexPoint));
+                    lineSegmentDistance.Insert(point, float.MaxValue);
+                    //Find index of the smallest float point
+                    lowest = 0;
+                    current = lineSegmentDistance[0];
+                    for (int i = 0; i < lineSegmentDistance.Count; i++)
                     {
-                        var a = simplex[(s) % simplex.Count];
-                        var b = simplex[(s + 1) % simplex.Count];
-                        distToSimplexSegments[(s) % simplex.Count] = Mathf.Abs(PointToLine(Vector3.zero, a, b));
+                        if (lineSegmentDistance[i] < current)
+                        {
+                            current = lineSegmentDistance[i];
+                            lowest = i;
+                        }
                     }
-                    minIndex = MinIndex(distToSimplexSegments);
-                    minDist = distToSimplexSegments[minIndex];
-                    //Output pen depth
-                    movement = simplex[minIndex] + simplex[(minIndex + 1) % simplex.Count] / 2;
+                    SmallestIndexPoint = lowest;
+
+                    //Find the dot product of the simplex from smallest index points to compute new minimum distance
+                    for (int j = SmallestIndexPoint; j <= SmallestIndexPoint + 1; j++)
+                    {
+                        tanToLine = Vector3.Cross((simplex[(j + 1) % simplex.Count] - simplex[(j) % simplex.Count]), Vector3.up);
+                        product = Vector3.Dot(Vector3.zero - simplex[(j) % simplex.Count], tanToLine.normalized);
+                        lineSegmentDistance[(j) % simplex.Count] = Mathf.Abs(product);
+                    }
+
+                    //Recalculate smallest index point for the movement vector.
+                    lowest = 0;
+                    current = lineSegmentDistance[0];
+                    for (int i = 0; i < lineSegmentDistance.Count; i++)
+                    {
+                        if (lineSegmentDistance[i] < current)
+                        {
+                            current = lineSegmentDistance[i];
+                            lowest = i;
+                        }
+                    }
+
+                    SmallestIndexPoint = lowest;
+                    //Set movement vector to the penetration depth of the prisms
+                    movement = simplex[SmallestIndexPoint] + getNextArrayPoint(simplex, SmallestIndexPoint, 1) / 2;
                 }
-
             }
-
         }
         //Returns------------------------------------------------
         if (isIntersecting == true)
@@ -306,52 +341,25 @@ public class PrismManager : MonoBehaviour
         //--------------------------------------------------------
     }
 
-    private Vector3 epaSupportPoint(List<Vector3> pointList, List<Vector3> simplex, int minIndex)
+    private Vector3 getNextArrayPoint(List<Vector3> array, int currentPoisition, int desiredPositionForward )
     {
-        var tangent = Vector3.Cross(simplex[(minIndex + 1) % simplex.Count] - simplex[minIndex], Vector3.up);
-        var orientation = -Mathf.Sign(Vector3.Dot(tangent, -simplex[minIndex]));
-        var supportAxis = (Vector3.Cross(simplex[(minIndex + 1) % simplex.Count] - simplex[minIndex], Vector3.up)) * (-Mathf.Sign(Vector3.Dot(tangent, -simplex[minIndex])));
-        return pointList.Aggregate((a, b) => Vector3.Dot(a, supportAxis) > Vector3.Dot(b, supportAxis) ? a : b);
+        int counter = array.Count;
+        Vector3 nextPosition = array[(currentPoisition + desiredPositionForward) % counter];
+        return nextPosition;
+    }
+
+    private Vector3 epaSupportPoint(List<Vector3> pointList, List<Vector3> simplex, int SmallestIndexPoint)
+    {
+        var tanToLine = Vector3.Cross(simplex[(SmallestIndexPoint + 1) % simplex.Count] - simplex[SmallestIndexPoint], Vector3.up);
+        var orientation = -Mathf.Sign(Vector3.Dot(tanToLine, -simplex[SmallestIndexPoint]));
+        var axis = (Vector3.Cross(simplex[(SmallestIndexPoint + 1) % simplex.Count] - simplex[SmallestIndexPoint], Vector3.up)) * (-Mathf.Sign(Vector3.Dot(tanToLine, -simplex[SmallestIndexPoint])));
+        return pointList.Aggregate((point1, point2) => Vector3.Dot(point1, axis) > Vector3.Dot(point2, axis) ? point1 : point2);
     }
 
     private Vector3 FindSupportPoint(List<Vector3> points, List<Vector3> simplex)
     {
         var supportAxis = (Vector3.Cross(simplex[1] - simplex[0], Vector3.up)) * (Mathf.Sign(Vector3.Dot(Vector3.Cross(simplex[1] - simplex[0], Vector3.up), -simplex[0])));
         return points.Aggregate((a, b) => Vector3.Dot(a, supportAxis) > Vector3.Dot(b, supportAxis) ? a : b);
-    }
-
-    private Vector3 PointToLineTangent(Vector3 p, Vector3 a, Vector3 b)
-    {
-        var newVec = p - a;
-        var dir = b - a;
-        var tangent = Vector3.Cross(dir, Vector3.up);
-
-        var result = Vector3.Dot(newVec, tangent) / (newVec.magnitude) * newVec.magnitude;
-        return tangent * result;
-    }
-
-    private float PointToLine(Vector3 p, Vector3 a, Vector3 b)
-    {
-        var newVec = p - a;
-        var dir = b - a;
-        var tangent = Vector3.Cross(dir, Vector3.up).normalized;
-
-        var result = Vector3.Dot(newVec, tangent) / (newVec.magnitude) * newVec.magnitude;
-        return result;
-    }
-    private int MinIndex(List<float> a)
-    {
-        int lowest = 0;
-        float current = a[0];
-        for (int i = 0; i < a.Count; i++)
-        {
-            if (a[i] < current)
-            {
-                current = a[i];
-                lowest = i;
-            }
-        }
-        return lowest;
     }
     #endregion
 
