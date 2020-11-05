@@ -8,6 +8,8 @@ public class CameraController : MonoBehaviour
     public float border = 10f;
     public float scrollSpeed = 200f;
 
+    public AgentManager manage;
+
     // Update is called once per frame
     void Update()
     {
@@ -21,6 +23,16 @@ public class CameraController : MonoBehaviour
         else
         {
             moveSpeed = 10f;
+        }
+
+        //Get mouse click position
+        if (Input.GetMouseButtonDown(1))
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100))
+            {
+                manage.SetAgentDestinations(hit.point);
+            }
         }
 
         // forward
