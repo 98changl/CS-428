@@ -26,7 +26,7 @@ public class CameraController : MonoBehaviour
         }
 
         //Get mouse click position
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButtonDown(0))
         {
             RaycastHit hit;
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100))
@@ -36,22 +36,22 @@ public class CameraController : MonoBehaviour
         }
 
         // forward
-        if (Input.GetKey("w") || Input.mousePosition.y >= Screen.height - border)
+        if (Input.GetKey("w"))
         {
             pos.z += moveSpeed * Time.deltaTime;
         }
         // back
-        if (Input.GetKey("s") || Input.mousePosition.y <= border)
+        if (Input.GetKey("s"))
         {
             pos.z -= moveSpeed * Time.deltaTime;
         }
         // left
-        if (Input.GetKey("a") || Input.mousePosition.x <= border)
+        if (Input.GetKey("a"))
         {
             pos.x -= moveSpeed * Time.deltaTime;
         }
         // right
-        if (Input.GetKey("d") || Input.mousePosition.x >= Screen.width - border)
+        if (Input.GetKey("d"))
         {
             pos.x += moveSpeed * Time.deltaTime;
         }

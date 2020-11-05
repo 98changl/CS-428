@@ -115,12 +115,9 @@ public class Agent : MonoBehaviour
         }
 
         var temp = path[0] - transform.position;
-        var val = temp.normalized * Mathf.Min(temp.magnitude, Parameters.maxSpeed);
-
-
-        Vector3 distanceToDestination = (rb.position - nma.destination).normalized;
-        Debug.Log(mass * (((Parameters.maxSpeed * val) - rb.velocity) / Parameters.T));
-        return mass * (((Parameters.maxSpeed * val) - rb.velocity) / Parameters.T);
+        var desiredVel = temp.normalized * Mathf.Min(temp.magnitude, Parameters.maxSpeed);
+        var actualVelocity = rb.velocity;
+        return mass * (desiredVel - actualVelocity) / Parameters.T;
     }
 
     private Vector3 CalculateAgentForce()
