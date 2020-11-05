@@ -95,6 +95,8 @@ public class Agent : MonoBehaviour
     {
         var force = Vector3.zero;
 
+        force = CalculateGoalForce();
+
         if (force != Vector3.zero)
         {
             return force.normalized * Mathf.Min(force.magnitude, Parameters.maxSpeed);
@@ -106,12 +108,25 @@ public class Agent : MonoBehaviour
     
     private Vector3 CalculateGoalForce()
     {
-        return Vector3.zero;
+
+        if(path.Count == 0)
+        {
+            return Vector3.zero;
+        }
+
+        var temp = path[0] - transform.position;
+        var val = temp.normalized * Mathf.Min(temp.magnitude, Parameters.maxSpeed);
+
+
+        Vector3 distanceToDestination = (rb.position - nma.destination).normalized;
+        Debug.Log(mass * (((Parameters.maxSpeed * val) - rb.velocity) / Parameters.T));
+        return mass * (((Parameters.maxSpeed * val) - rb.velocity) / Parameters.T);
     }
 
     private Vector3 CalculateAgentForce()
     {
         return Vector3.zero;
+
     }
 
     private Vector3 CalculateWallForce()
