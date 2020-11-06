@@ -119,7 +119,6 @@ public class Agent : MonoBehaviour
         var actualVelocity = rb.velocity;
         return mass * (desiredVel - actualVelocity) / Parameters.T;
 
-
         /*
         var val = temp.normalized * Mathf.Min(temp.magnitude, Parameters.maxSpeed);
 

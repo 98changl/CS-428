@@ -51,7 +51,7 @@ public class AgentManager : MonoBehaviour
     void Update()
     {
         #region Visualization
-        
+
         if (Input.GetMouseButtonDown(0))
         {
             if (true)
@@ -123,10 +123,11 @@ public class AgentManager : MonoBehaviour
         return agentsObjs.ContainsKey(obj);
     }
 
-    public void SetAgentDestinations(Vector3 destination)
+    public void SetAgentDestinations(Vector3 newDestination)
     {
+        destination = newDestination;
         NavMeshHit hit;
-        NavMesh.SamplePosition(destination, out hit, 10, NavMesh.AllAreas);
+        NavMesh.SamplePosition(newDestination, out hit, 10, NavMesh.AllAreas);
         foreach (var agent in agents)
         {
             agent.ComputePath(hit.position);
