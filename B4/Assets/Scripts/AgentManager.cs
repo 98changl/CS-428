@@ -13,7 +13,7 @@ public class AgentManager : MonoBehaviour
 
     private static List<Agent> agents = new List<Agent>();
     private GameObject agentParent;
-    private Vector3 destination;
+    public Vector3 destination;
 
     public const float UPDATE_RATE = 0.0f;
     private const int PATHFINDING_FRAME_SKIP = 25;
@@ -123,11 +123,10 @@ public class AgentManager : MonoBehaviour
         return agentsObjs.ContainsKey(obj);
     }
 
-    public void SetAgentDestinations(Vector3 newDestination)
+    public void SetAgentDestinations(Vector3 destination)
     {
-        destination = newDestination;
         NavMeshHit hit;
-        NavMesh.SamplePosition(newDestination, out hit, 10, NavMesh.AllAreas);
+        NavMesh.SamplePosition(destination, out hit, 10, NavMesh.AllAreas);
         foreach (var agent in agents)
         {
             agent.ComputePath(hit.position);

@@ -32,7 +32,7 @@ public class CameraController : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100))
             {
-                manage.SetAgentDestinations(hit.point);
+                manage.destination = hit.point;
             }
             
         }
