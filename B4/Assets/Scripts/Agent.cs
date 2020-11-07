@@ -95,7 +95,7 @@ public class Agent : MonoBehaviour
     {
         var force = Vector3.zero;
 
-        force = CalculateGoalForce();
+        force = CalculateGoalForce() + CalculateAgentForce() + CalculateWallForce();
 
         if (force != Vector3.zero)
         {
@@ -108,8 +108,7 @@ public class Agent : MonoBehaviour
     
     private Vector3 CalculateGoalForce()
     {
-
-        if(path.Count == 0)
+        if (path.Count == 0)
         {
             return Vector3.zero;
         }
@@ -132,13 +131,70 @@ public class Agent : MonoBehaviour
 
     private Vector3 CalculateAgentForce()
     {
-        return Vector3.zero;
+        var agentForce = Vector3.zero;
 
+        foreach (var n in perceivedNeighbors)
+        {
+            if (!AgentManager.IsAgent(n))
+            {
+                continue;
+            }
+
+            var neighbor = AgentManager.agentsObjs[n];
+
+            var overlap = (radius + neighbor.radius) - Vector3.Distance(transform.position, neighbor.transform.position); // rij - dij
+            var psychological = Parameters.A * Mathf.Exp(overlap / Parameters.B);
+
+            var g = 0;
+            if (overlap > 0f)
+                g = 1;
+            var non_penetration = Parameters.k * g * overlap;
+
+            var dir = (transform.position - neighbor.transform.position).normalized; // nij
+            agentForce += (psychological + non_penetration) * dir;
+
+            var tangent = Vector3.Cross(Vector3.up, dir);
+            var tangental_velocity = Vector3.Dot(rb.velocity - neighbor.GetVelocity(), tangent);
+            var friction = Parameters.Kappa * g * overlap * tangental_velocity * tangent;
+
+            agentForce += friction; // force of sliding friction
+        }
+
+        return agentForce;
     }
 
     private Vector3 CalculateWallForce()
     {
-        return Vector3.zero;
+        var wallForce = Vector3.zero;
+
+        foreach (var n in perceivedNeighbors)
+        {
+            if (!WallManager.IsWall(n))
+            {
+                continue;
+            }
+
+            GameObject neighbor = n;
+
+            var overlap = (radius + (neighbor.transform.localScale.x / 2)) - Vector3.Distance(transform.position, neighbor.transform.position);
+            var psychological = Parameters.WALL_A * Mathf.Exp(overlap / Parameters.WALL_B);
+
+            var g = 0;
+            if (overlap > 0f)
+                g = 1;
+            var non_penetration = Parameters.WALL_k * g * overlap;
+
+            var dir = (transform.position - neighbor.transform.position).normalized; // nij
+            wallForce += (psychological + non_penetration) * dir;
+
+            var tangent = Vector3.Cross(Vector3.up, dir);
+            var tangental_velocity = Vector3.Dot(rb.velocity, tangent);
+            var friction_force = Parameters.WALL_Kappa * g * overlap * tangental_velocity * tangent;
+
+            wallForce -= friction_force;
+        }
+
+        return wallForce;
     }
 
     public void ApplyForce()
@@ -151,22 +207,30 @@ public class Agent : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-
+        perceivedNeighbors.Add(other.gameObject);
+        ComputeForce();
+        ApplyForce();
     }
     
     public void OnTriggerExit(Collider other)
     {
-
+        perceivedNeighbors.Remove(other.gameObject);
+        ComputeForce();
+        ApplyForce();
     }
 
     public void OnCollisionEnter(Collision collision)
     {
-        
+        perceivedNeighbors.Add(collision.gameObject);
+        ComputeForce();
+        ApplyForce();
     }
 
     public void OnCollisionExit(Collision collision)
     {
-        
+        perceivedNeighbors.Remove(collision.gameObject);
+        ComputeForce();
+        ApplyForce();
     }
 
     #endregion
