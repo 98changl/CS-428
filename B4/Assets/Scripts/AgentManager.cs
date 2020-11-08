@@ -135,10 +135,11 @@ public class AgentManager : MonoBehaviour
 
     public static void RemoveAgent(GameObject obj)
     {
-        var agent = obj.GetComponent<Agent>();
+            var agent = obj.GetComponent<Agent>();
 
-        agents.Remove(agent);
-        agentsObjs.Remove(obj);
+            agents.Remove(agent);
+            agentsObjs.Remove(obj);
+
     }
 
     #endregion

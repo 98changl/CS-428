@@ -10,6 +10,15 @@ public class Agent : MonoBehaviour
     public float mass;
     public float perceptionRadius;
 
+    //-----------------------------------------------------------------------------
+    /* The remove agent boolean is responsible for making sure that the agent
+     * is not removed after it reaches its destination. When testing the spiral
+     * functionality set this boolean to false so the agent is not removed once
+     * it hits its destination.
+     */
+    private bool removeAgent = false;
+    //-----------------------------------------------------------------------------
+
     private List<Vector3> path;
     private NavMeshAgent nma;
     private Rigidbody rb;
@@ -37,7 +46,7 @@ public class Agent : MonoBehaviour
         {
             path.RemoveAt(0);
 
-            if (path.Count == 0)
+            if (path.Count == 0 && removeAgent == true)
             {
                 gameObject.SetActive(false);
                 AgentManager.RemoveAgent(gameObject);
