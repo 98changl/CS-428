@@ -32,7 +32,7 @@ public class Spiral : MonoBehaviour
         var sinCurve = Mathf.Sin(adder) * radius;
         var cosCurve = Mathf.Cos(adder) * radius;
 
-        manage.destination = new Vector3(sinCurve, 0, cosCurve);
+        manage.destination = new Vector3(0, 0, 0);
 
         adder += 0.3f * Time.deltaTime;
         radius += 0.001f;
