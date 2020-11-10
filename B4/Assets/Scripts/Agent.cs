@@ -157,7 +157,7 @@ public class Agent : MonoBehaviour
             var g = 0;
             if (overlap > 0f)
                 g = 1;
-            var non_penetration =  (g * overlap) / Parameters.k;
+            var non_penetration = (g * overlap) / Parameters.k;
 
             var dir = (transform.position - neighbor.transform.position).normalized; // nij
             agentForce += (psychological + non_penetration) * dir;
@@ -212,6 +212,7 @@ public class Agent : MonoBehaviour
         force.y = 0;
 
         rb.AddForce(force / mass, ForceMode.Acceleration);
+        CalculateFlock();
     }
 
     public void OnTriggerEnter(Collider other)
@@ -232,6 +233,81 @@ public class Agent : MonoBehaviour
     public void OnCollisionExit(Collision collision)
     {
         perceivedNeighbors.Remove(collision.gameObject);
+    }
+
+    private void CalculateFlock()
+    {
+        var weight = 0.1f;
+        var velocity = CalculateAlignment() * weight + CalculateCohesion() * weight + CalculateSeperation() * weight;
+        
+        rb.velocity += velocity;
+    }
+
+    private Vector3 CalculateAlignment()
+    {
+        var velocity = Vector3.zero;
+
+        var count = 0;
+        foreach(var n in perceivedNeighbors)
+        {
+            if (!AgentManager.IsAgent(n))
+            {
+                continue;
+            }
+
+            var neighbor = AgentManager.agentsObjs[n];
+            velocity += neighbor.GetVelocity();
+            count++;
+        }
+
+        if (count == 0)
+            return velocity;
+        velocity /= count;
+        return velocity.normalized;
+    }
+
+    private Vector3 CalculateCohesion()
+    {
+        var velocity = Vector3.zero;
+
+        var count = 0;
+        foreach (var n in perceivedNeighbors)
+        {
+            if (!AgentManager.IsAgent(n))
+            {
+                continue;
+            }
+
+            var neighbor = AgentManager.agentsObjs[n];
+            velocity += neighbor.transform.position;
+            count++;
+        }
+
+        if (count == 0)
+            return velocity;
+
+        velocity /= count;
+        velocity = (velocity - transform.position);
+        return velocity.normalized;
+    }
+
+    private Vector3 CalculateSeperation()
+    {
+        var velocity = Vector3.zero;
+
+        foreach (var n in perceivedNeighbors)
+        {
+            if (!AgentManager.IsAgent(n))
+            {
+                continue;
+            }
+
+            var neighbor = AgentManager.agentsObjs[n];
+            velocity += neighbor.transform.position - transform.position;
+        }
+
+        velocity *= -1;
+        return velocity.normalized;
     }
 
     #endregion
