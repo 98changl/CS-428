@@ -157,7 +157,7 @@ public class Agent : MonoBehaviour
             var g = 0;
             if (overlap > 0f)
                 g = 1;
-            var non_penetration = Parameters.k * g * overlap;
+            var non_penetration =  (g * overlap) / Parameters.k;
 
             var dir = (transform.position - neighbor.transform.position).normalized; // nij
             agentForce += (psychological + non_penetration) * dir;
@@ -191,7 +191,7 @@ public class Agent : MonoBehaviour
             var g = 0;
             if (overlap > 0f)
                 g = 1;
-            var non_penetration = Parameters.WALL_k * g * overlap;
+            var non_penetration = (g * overlap) / Parameters.WALL_k;
 
             var dir = (transform.position - neighbor.transform.position).normalized; // nij
             wallForce += (psychological + non_penetration) * dir;
@@ -211,35 +211,27 @@ public class Agent : MonoBehaviour
         var force = ComputeForce();
         force.y = 0;
 
-        rb.AddForce(force * 10, ForceMode.Force);
+        rb.AddForce(force / mass, ForceMode.Acceleration);
     }
 
     public void OnTriggerEnter(Collider other)
     {
         perceivedNeighbors.Add(other.gameObject);
-        ComputeForce();
-        ApplyForce();
     }
     
     public void OnTriggerExit(Collider other)
     {
         perceivedNeighbors.Remove(other.gameObject);
-        ComputeForce();
-        ApplyForce();
     }
 
     public void OnCollisionEnter(Collision collision)
     {
         perceivedNeighbors.Add(collision.gameObject);
-        ComputeForce();
-        ApplyForce();
     }
 
     public void OnCollisionExit(Collision collision)
     {
         perceivedNeighbors.Remove(collision.gameObject);
-        ComputeForce();
-        ApplyForce();
     }
 
     #endregion
