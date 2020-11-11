@@ -9,6 +9,7 @@ public class Agent : MonoBehaviour
     public float radius;
     public float mass;
     public float perceptionRadius;
+    public float radiusExpander = -30f;
 
     //-----------------------------------------------------------------------------
     /* The remove agent boolean is responsible for making sure that the agent
@@ -107,6 +108,7 @@ public class Agent : MonoBehaviour
         force = CalculateGoalForce() + CalculateAgentForce() + CalculateWallForce();
         //force += CalculateCrowdFollow();
         //force = CalculateFlock();
+        //force = SpiralForce() + CalculateAgentForce() + CalculateWallForce();
 
         if (force != Vector3.zero)
         {
@@ -125,10 +127,9 @@ public class Agent : MonoBehaviour
             return Vector3.zero;
         }
 
-        var temp = path[0] - transform.position;
-        var desiredVel = temp.normalized * Mathf.Min(temp.magnitude, Parameters.maxSpeed);
-        var actualVelocity = rb.velocity;
-        return mass * (desiredVel - actualVelocity) / Parameters.T;
+        var velocity = (path[0] - transform.position).normalized * Mathf.Min((path[0] - transform.position).magnitude, Parameters.maxSpeed);
+        return mass * (velocity - rb.velocity) / Parameters.T;
+
 
         /*
         var val = temp.normalized * Mathf.Min(temp.magnitude, Parameters.maxSpeed);
@@ -211,6 +212,38 @@ public class Agent : MonoBehaviour
 
         return wallForce;
     }
+
+    private Vector3 SpiralForce()
+    {
+        if (path.Count == 0)
+        {
+            return Vector3.zero;
+        }
+
+        //var temp = path[0] - transform.position + new Vector3(sinCurve, 0, cosCurve);
+        var temp = path[0] - transform.position;
+        temp = Quaternion.AngleAxis(radiusExpander, Vector3.up) * temp;
+
+        if (radiusExpander > -90f)
+        {
+            radiusExpander -= 0.13f;
+        }
+        /*
+        if (Spiralradius < 10)
+        {
+            Spiralradius += 0.008f;
+        }
+        adder += 0.3f * Time.deltaTime;
+        */
+        var desiredVel = temp.normalized * Mathf.Min(temp.magnitude, 4);
+        var actualVelocity = rb.velocity;
+
+        //Debug.DrawLine(transform.position, temp, Color.yellow);
+        //Debug.DrawLine(transform.position, temp, Color.green, 0.5f);
+
+        return mass * (desiredVel - actualVelocity) / Parameters.T;
+    }
+
 
     public void ApplyForce()
     {

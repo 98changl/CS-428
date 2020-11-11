@@ -5751,6 +5751,7 @@ MonoBehaviour:
   agentSpawnRadius: 30
   agentPrefab: {fileID: 5631278990405910066, guid: 56f77a4dd20f2c8429126acdc1c44436,
     type: 3}
+  destination: {x: 0, y: 0, z: 0}
 --- !u!114 &1231321498
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8725,13 +8726,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1959334989}
-  m_LocalRotation: {x: 0.39947698, y: -0, z: -0, w: 0.9167433}
-  m_LocalPosition: {x: 0, y: 14.87, z: -17.82}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 6.01, z: -26.52}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 47.091003, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1959334993
 MonoBehaviour:
   m_ObjectHideFlags: 0

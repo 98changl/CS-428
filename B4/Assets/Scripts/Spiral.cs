@@ -4,10 +4,7 @@ using UnityEngine;
 
 public class Spiral : MonoBehaviour
 {
-    public float T = -10;
     public AgentManager manage;
-    public float adder = 0;
-    public float radius = 1;
 
     // Start is called before the first frame update
     void Start()
@@ -27,17 +24,7 @@ public class Spiral : MonoBehaviour
         T += .0005f;
         */
         //Mathf.Cos(Mathf.PI * T)
-
-
-        var sinCurve = Mathf.Sin(adder) * radius;
-        var cosCurve = Mathf.Cos(adder) * radius;
-
         manage.destination = new Vector3(0, 0, 0);
-
-        adder += 0.3f * Time.deltaTime;
-        radius += 0.001f;
-
-        Debug.Log(sinCurve);
 
     }
 }
