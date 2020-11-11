@@ -7,62 +7,69 @@ public class CameraController : MonoBehaviour
     public float moveSpeed = 10f;
     public float border = 10f;
     public float scrollSpeed = 200f;
+    float xAxis, yAxis;
 
     public AgentManager manage;
 
     // Update is called once per frame
     void Update()
     {
-        Vector3 pos = transform.position;
+        cameraLook();
+        cameraMovements();
 
-        // camera "sprint"
-        if (Input.GetKey("left shift"))
-        {
-            moveSpeed = 20f;
-        }
-        else
-        {
-            moveSpeed = 10f;
-        }
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = true;
 
         //Get mouse click position
         if (Input.GetMouseButtonDown(0))
         {
-            
             RaycastHit hit;
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100))
             {
                 manage.destination = hit.point;
             }
-            
-        }
 
-        // forward
-        if (Input.GetKey("w"))
-        {
-            pos.z += moveSpeed * Time.deltaTime;
         }
-        // back
-        if (Input.GetKey("s"))
-        {
-            pos.z -= moveSpeed * Time.deltaTime;
-        }
-        // left
-        if (Input.GetKey("a"))
-        {
-            pos.x -= moveSpeed * Time.deltaTime;
-        }
-        // right
-        if (Input.GetKey("d"))
-        {
-            pos.x += moveSpeed * Time.deltaTime;
-        }
-
-        // scroll up and down
-        float scroll = Input.GetAxis("Mouse ScrollWheel");
-        pos.y -= scroll * scrollSpeed * Time.deltaTime;
-        
-        transform.position = pos;
     }
 
+    void cameraLook()
+    {
+        xAxis += Input.GetAxis("Mouse X");
+        yAxis += -Input.GetAxis("Mouse Y");
+        transform.eulerAngles = new Vector2(yAxis, xAxis);
+    }
+
+    void cameraMovements()
+    {
+        //Move Forward
+        if (Input.GetKey(KeyCode.W))
+        {
+            transform.localPosition += transform.TransformDirection(Vector3.forward * 10f * Time.deltaTime);
+        }
+        //Move Left
+        if (Input.GetKey(KeyCode.A))
+        {
+            transform.localPosition += transform.TransformDirection(Vector3.left * 10f * Time.deltaTime);
+        }
+        //Move Back
+        if (Input.GetKey(KeyCode.S))
+        {
+            transform.localPosition += transform.TransformDirection(Vector3.back * 10f * Time.deltaTime);
+        }
+        //Move Right
+        if (Input.GetKey(KeyCode.D))
+        {
+            transform.localPosition += transform.TransformDirection(Vector3.right * 10f * Time.deltaTime);
+        }
+        //Move Up
+        if (Input.GetKey(KeyCode.Space))
+        {
+            transform.position += 10f * new Vector3(0, 1, 0) * Time.deltaTime;
+        }
+        //Move Down
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            transform.position += 10f * new Vector3(0, -1, 0) * Time.deltaTime;
+        }
+    }
 }
