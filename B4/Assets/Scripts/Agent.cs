@@ -105,10 +105,13 @@ public class Agent : MonoBehaviour
         var force = Vector3.zero;
 
         force = CalculateGoalForce() + CalculateAgentForce() + CalculateWallForce();
+        //force += CalculateCrowdFollow();
+        //force = CalculateFlock();
 
         if (force != Vector3.zero)
         {
-            return force.normalized * Mathf.Min(force.magnitude, Parameters.maxSpeed);
+
+            return Mathf.Min(force.magnitude, Parameters.maxSpeed) * force.normalized;
         } else
         {
             return Vector3.zero;
@@ -156,8 +159,11 @@ public class Agent : MonoBehaviour
 
             var g = 0;
             if (overlap > 0f)
+            {
                 g = 1;
-            var non_penetration = (g * overlap) / Parameters.k;
+                //Debug.Log("overlap");
+            }
+            var non_penetration = Parameters.k * g * overlap;
 
             var dir = (transform.position - neighbor.transform.position).normalized; // nij
             agentForce += (psychological + non_penetration) * dir;
@@ -191,7 +197,7 @@ public class Agent : MonoBehaviour
             var g = 0;
             if (overlap > 0f)
                 g = 1;
-            var non_penetration = (g * overlap) / Parameters.WALL_k;
+            var non_penetration = Parameters.WALL_k * g * overlap;
 
             var dir = (transform.position - neighbor.transform.position).normalized; // nij
             wallForce += (psychological + non_penetration) * dir;
@@ -211,8 +217,9 @@ public class Agent : MonoBehaviour
         var force = ComputeForce();
         force.y = 0;
 
+        //force += CalculateCrowdFollow();
         rb.AddForce(force / mass, ForceMode.Acceleration);
-        CalculateFlock();
+        //CalculateFlock();
     }
 
     public void OnTriggerEnter(Collider other)
@@ -235,12 +242,38 @@ public class Agent : MonoBehaviour
         perceivedNeighbors.Remove(collision.gameObject);
     }
 
-    private void CalculateFlock()
+    private Vector3 CalculateCrowdFollow()
     {
-        var weight = 0.1f;
+        var weight = 1.4f * 10f;
+        var averageForce = Vector3.zero;
+
+        var count = 0;
+        foreach (var n in perceivedNeighbors)
+        {
+            if (!AgentManager.IsAgent(n))
+            {
+                continue;
+            }
+
+            var neighbor = AgentManager.agentsObjs[n];
+            averageForce += neighbor.GetVelocity();
+            count++;
+        }
+
+        if (count == 0)
+            return averageForce;
+
+        averageForce /= count;
+        //averageForce *= weight;
+        return averageForce.normalized * weight;
+    }
+
+    private Vector3 CalculateFlock()
+    {
+        var weight = 1f;
         var velocity = CalculateAlignment() * weight + CalculateCohesion() * weight + CalculateSeperation() * weight;
         
-        rb.velocity += velocity;
+        return velocity / Parameters.T;
     }
 
     private Vector3 CalculateAlignment()
