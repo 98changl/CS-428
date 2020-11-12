@@ -106,13 +106,15 @@ public class Agent : MonoBehaviour
         var force = Vector3.zero;
 
         force = CalculateGoalForce() + CalculateAgentForce() + CalculateWallForce();
-        //force += CalculateCrowdFollow();
 
         // to test spiral force behavior, uncomment the bottom code to override goal force
         //force = SpiralForce() + CalculateAgentForce() + CalculateWallForce();
 
+        // to test crowd following, uncomment the bottom code to override goal force
+        //force = CalculateCrowdFollow() + CalculateAgentForce() + CalculateWallForce();
+
         // to test flock behavior, uncomment the bottom code to override goal force
-        force = CalculateFlock() + CalculateWallForce();
+        force = CalculateFlock() + CalculateAgentForce() + CalculateWallForce();
 
         if (force != Vector3.zero)
         {
@@ -278,8 +280,13 @@ public class Agent : MonoBehaviour
 
     private Vector3 CalculateCrowdFollow()
     {
-        var weight = 1.4f * 10f;
+        var weight = 4.0f;
         var averageForce = Vector3.zero;
+
+        if (path.Count == 0)
+        {
+            return averageForce;
+        }
 
         var count = 0;
         foreach (var n in perceivedNeighbors)
@@ -291,25 +298,27 @@ public class Agent : MonoBehaviour
 
             var neighbor = AgentManager.agentsObjs[n];
             averageForce += neighbor.GetVelocity();
-            count++;
+            count += 1;
         }
 
         if (count == 0)
             return averageForce;
 
         averageForce /= count;
-        //averageForce *= weight;
-        return averageForce.normalized * weight;
+
+        var desiredVel = averageForce.normalized * Mathf.Min(averageForce.magnitude, weight);
+        return mass * (desiredVel - rb.velocity) / Parameters.T;
     }
 
     private Vector3 CalculateFlock()
     {
-        var alignmentWeight = 0.1f;
+        var alignmentWeight = 2f;
         var cohesionWeight = 2f;
         var seperationWeight = 2f;
         var force = CalculateAlignment() * alignmentWeight + CalculateCohesion() * cohesionWeight + CalculateSeperation() * seperationWeight;
 
-        return force / Parameters.T;
+        var velocity = Mathf.Min(force.magnitude, 5) * force.normalized;
+        return mass * (velocity - rb.velocity) / Parameters.T;
     }
 
     private Vector3 CalculateAlignment()
@@ -364,6 +373,7 @@ public class Agent : MonoBehaviour
     private Vector3 CalculateSeperation()
     {
         var seperationForce = Vector3.zero;
+        var avoidanceRadius = perceptionRadius / 2;
         var count = 0;
 
         foreach (var n in perceivedNeighbors)
@@ -375,9 +385,9 @@ public class Agent : MonoBehaviour
 
             var neighbor = AgentManager.agentsObjs[n];
 
-            if (Vector3.Distance(transform.position, neighbor.transform.position) < radius * 3)
+            var magnitude = (neighbor.transform.position - transform.position).sqrMagnitude;
+            if (magnitude < avoidanceRadius)
             {
-                //Debug.Log("Seperate");
                 count += 1;
                 seperationForce += (transform.position - neighbor.transform.position);
             }
