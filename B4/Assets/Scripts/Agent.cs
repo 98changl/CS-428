@@ -106,6 +106,8 @@ public class Agent : MonoBehaviour
         var force = Vector3.zero;
 
         force = CalculateGoalForce() + CalculateAgentForce() + CalculateWallForce();
+        
+        //This code block below is for the pursue and evade forces
         /*
         force = (Pursue() * 1.5f) + (Evade().normalized * 0.6f) + CalculateAgentForce() + CalculateWallForce();
         if(rb.velocity.magnitude > 4f)
