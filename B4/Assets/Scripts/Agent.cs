@@ -26,6 +26,10 @@ public class Agent : MonoBehaviour
 
     private HashSet<GameObject> perceivedNeighbors = new HashSet<GameObject>();
 
+    //Leader/Follower Variables
+    private List<GameObject> agents;
+    private GameObject leader;
+
     void Start()
     {
         path = new List<Vector3>();
@@ -36,6 +40,11 @@ public class Agent : MonoBehaviour
         nma.radius = radius;
         rb.mass = mass;
         GetComponent<SphereCollider>().radius = perceptionRadius / 2;
+
+        //Leader/Follower
+        //  agents = new List<GameObject>(AgentManager.agentsObjs.Keys);
+        // agents[0].name = "Leader";
+        // leader = GameObject.Find("Leader");
     }
 
     private void Update()
@@ -124,6 +133,16 @@ public class Agent : MonoBehaviour
 
         // to test flock behavior, uncomment the bottom code to override goal force
         //force = CalculateFlock() + CalculateAgentForce() + CalculateWallForce();
+
+        //Leader/Follower
+        // force -= CalculateGoalForce();
+        // if((rb.name).Equals("Leader"))
+        // {
+        //     force +=CalculateGoalForce();
+        // } else
+        // {
+        //     force += calculateFollowerForce();
+        // }
 
         if (force != Vector3.zero)
         {
@@ -257,6 +276,27 @@ public class Agent : MonoBehaviour
         return mass * (desiredVel - actualVelocity) / Parameters.T;
     }
 
+    private Vector3 calculateFollowerForce()
+    {
+        var leaderVelocity =  leader.GetComponent<Rigidbody>().velocity;
+        var force = Vector3.zero;
+
+        //Detect if agent is in front of leader
+        var temp = (transform.position - leader.transform.position).normalized;
+        var dot = Vector3.Dot(temp, leader.transform.forward);
+
+        //Agent is in front of leader
+        if(dot > 0)
+        {
+            var magnitude = Mathf.Exp(Vector3.Angle(leaderVelocity, rb.velocity));
+            var tangent = Vector3.Cross(Vector3.up, temp);
+            var tangental_velocity = Vector3.Dot(rb.velocity, tangent);
+
+            force = tangental_velocity * ((float)magnitude) * tangent;
+            force.y = 0;
+        }
+        return force;
+    }
 
     public void ApplyForce()
     {
