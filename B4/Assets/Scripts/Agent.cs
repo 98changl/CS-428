@@ -106,6 +106,13 @@ public class Agent : MonoBehaviour
         var force = Vector3.zero;
 
         force = CalculateGoalForce() + CalculateAgentForce() + CalculateWallForce();
+        /*
+        force = (Pursue() * 1.5f) + (Evade().normalized * 0.6f) + CalculateAgentForce() + CalculateWallForce();
+        if(rb.velocity.magnitude > 4f)
+        {
+            rb.velocity = rb.velocity.normalized * 4f;
+        }
+        */
 
         // to test spiral force behavior, uncomment the bottom code to override goal force
         //force = SpiralForce() + CalculateAgentForce() + CalculateWallForce();
@@ -397,6 +404,89 @@ public class Agent : MonoBehaviour
 
         seperationForce /= count;
         return seperationForce;
+    }
+
+    public Vector3 Seek(Vector3 agent_target)
+    {
+        Vector3 velocity = Vector3.zero;
+        Vector3 force = Vector3.zero;
+        Vector3 desiredVel;
+        Vector3 toTarget = agent_target - transform.position;
+        toTarget.Normalize();
+        desiredVel = toTarget * Parameters.maxSpeed;
+        // force = desiredVel - rb.velocity;
+        force = desiredVel - (velocity * Time.deltaTime);
+        return force.normalized;
+    }
+
+    public Vector3 Pursue()
+    {
+        var agentScript = new List<Agent>(AgentManager.agentsObjs.Values);
+        var agents = new List<GameObject>(AgentManager.agentsObjs.Keys);
+        Vector3 toTarget;
+        Vector3 pursueTargetPos = Vector3.zero;
+        float lookAhead;
+        var cnt = 0;
+        foreach (var n in agents)
+        {
+            if (cnt % 2 == 0)
+            {
+                agents[cnt].name = "Evader" + cnt;
+                var evader = GameObject.Find("Evader" + cnt);
+                //var target = agents[0];
+                toTarget = evader.transform.position - transform.position;
+                lookAhead = toTarget.magnitude / Parameters.maxSpeed;
+                pursueTargetPos = evader.transform.position + (evader.GetComponent<Agent>().GetVelocity() * lookAhead);
+                //Vector3 pursueTargetPos = target.transform.position + (target.velocity * lookAhead);
+                //return Seek(pursueTargetPos);
+            }
+            cnt++;
+        }
+        return Seek(pursueTargetPos);
+    }
+
+    public Vector3 Flee(Vector3 targetPos)
+    {
+        Vector3 desiredVel;
+        Vector3 force = Vector3.zero;
+        desiredVel = transform.position - targetPos;
+        desiredVel.Normalize();
+        desiredVel *= Parameters.maxSpeed;
+        force = desiredVel - rb.velocity;
+
+        return force;
+    }
+    public Vector3 Evade()
+    {
+        var agentScript = new List<Agent>(AgentManager.agentsObjs.Values);
+        var agents = new List<GameObject>(AgentManager.agentsObjs.Keys);
+        Vector3 displacement;
+        Vector3 targetVel;
+        float distance;
+        float updatesNeeded;
+        Vector3 targetFuturePosition = Vector3.zero;
+        var cnt = 0;
+        foreach (var n in agents)
+        {
+            Debug.Log(cnt);
+            if (cnt % 2 != 0)
+            {
+                agents[cnt].name = "Pursuader" + cnt;
+                var pursuader = GameObject.Find("Pursuader" + cnt);
+                displacement = pursuader.transform.position - transform.position;
+                distance = displacement.magnitude;
+                updatesNeeded = distance / Parameters.maxSpeed;
+                targetVel = pursuader.GetComponent<Agent>().GetVelocity();
+                targetVel *= updatesNeeded;
+                targetFuturePosition = new Vector3(pursuader.transform.position.x,
+                                                            pursuader.transform.position.y,
+                                                            pursuader.transform.position.z);
+                targetFuturePosition += targetVel;
+                //return Flee(targetFuturePosition);
+            }
+            cnt++;
+        }
+        return Flee(targetFuturePosition);
     }
 
     #endregion
