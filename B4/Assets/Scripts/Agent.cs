@@ -107,12 +107,15 @@ public class Agent : MonoBehaviour
 
         force = CalculateGoalForce() + CalculateAgentForce() + CalculateWallForce();
         //force += CalculateCrowdFollow();
-        //force = CalculateFlock();
+
+        // to test spiral force behavior, uncomment the bottom code to override goal force
         //force = SpiralForce() + CalculateAgentForce() + CalculateWallForce();
+
+        // to test flock behavior, uncomment the bottom code to override goal force
+        force = CalculateFlock() + CalculateWallForce();
 
         if (force != Vector3.zero)
         {
-
             return Mathf.Min(force.magnitude, Parameters.maxSpeed) * force.normalized;
         } else
         {
@@ -129,7 +132,6 @@ public class Agent : MonoBehaviour
 
         var velocity = (path[0] - transform.position).normalized * Mathf.Min((path[0] - transform.position).magnitude, Parameters.maxSpeed);
         return mass * (velocity - rb.velocity) / Parameters.T;
-
 
         /*
         var val = temp.normalized * Mathf.Min(temp.magnitude, Parameters.maxSpeed);
@@ -252,7 +254,6 @@ public class Agent : MonoBehaviour
 
         //force += CalculateCrowdFollow();
         rb.AddForce(force / mass, ForceMode.Acceleration);
-        //CalculateFlock();
     }
 
     public void OnTriggerEnter(Collider other)
@@ -303,18 +304,20 @@ public class Agent : MonoBehaviour
 
     private Vector3 CalculateFlock()
     {
-        var weight = 1f;
-        var velocity = CalculateAlignment() * weight + CalculateCohesion() * weight + CalculateSeperation() * weight;
-        
-        return velocity / Parameters.T;
+        var alignmentWeight = 0.1f;
+        var cohesionWeight = 2f;
+        var seperationWeight = 2f;
+        var force = CalculateAlignment() * alignmentWeight + CalculateCohesion() * cohesionWeight + CalculateSeperation() * seperationWeight;
+
+        return force / Parameters.T;
     }
 
     private Vector3 CalculateAlignment()
     {
-        var velocity = Vector3.zero;
-
+        var alignmentForce = Vector3.zero;
         var count = 0;
-        foreach(var n in perceivedNeighbors)
+
+        foreach (var n in perceivedNeighbors)
         {
             if (!AgentManager.IsAgent(n))
             {
@@ -322,21 +325,22 @@ public class Agent : MonoBehaviour
             }
 
             var neighbor = AgentManager.agentsObjs[n];
-            velocity += neighbor.GetVelocity();
-            count++;
+            alignmentForce += neighbor.GetVelocity();
+            count += 1;
         }
 
         if (count == 0)
-            return velocity;
-        velocity /= count;
-        return velocity.normalized;
+            return Vector3.forward;
+
+        alignmentForce /= count;
+        return alignmentForce;
     }
 
     private Vector3 CalculateCohesion()
     {
-        var velocity = Vector3.zero;
-
+        var cohesionForce = Vector3.zero;
         var count = 0;
+
         foreach (var n in perceivedNeighbors)
         {
             if (!AgentManager.IsAgent(n))
@@ -345,21 +349,22 @@ public class Agent : MonoBehaviour
             }
 
             var neighbor = AgentManager.agentsObjs[n];
-            velocity += neighbor.transform.position;
-            count++;
+            cohesionForce += neighbor.transform.position;
+            count += 1;
         }
 
         if (count == 0)
-            return velocity;
+            return cohesionForce;
 
-        velocity /= count;
-        velocity = (velocity - transform.position);
-        return velocity.normalized;
+        cohesionForce /= count;
+        cohesionForce -= transform.position;
+        return cohesionForce;
     }
 
     private Vector3 CalculateSeperation()
     {
-        var velocity = Vector3.zero;
+        var seperationForce = Vector3.zero;
+        var count = 0;
 
         foreach (var n in perceivedNeighbors)
         {
@@ -369,11 +374,20 @@ public class Agent : MonoBehaviour
             }
 
             var neighbor = AgentManager.agentsObjs[n];
-            velocity += neighbor.transform.position - transform.position;
+
+            if (Vector3.Distance(transform.position, neighbor.transform.position) < radius * 3)
+            {
+                //Debug.Log("Seperate");
+                count += 1;
+                seperationForce += (transform.position - neighbor.transform.position);
+            }
         }
 
-        velocity *= -1;
-        return velocity.normalized;
+        if (count == 0)
+            return seperationForce;
+
+        seperationForce /= count;
+        return seperationForce;
     }
 
     #endregion
