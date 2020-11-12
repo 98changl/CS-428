@@ -111,10 +111,10 @@ public class Agent : MonoBehaviour
         //force = SpiralForce() + CalculateAgentForce() + CalculateWallForce();
 
         // to test crowd following, uncomment the bottom code to override goal force
-        //force = CalculateCrowdFollow() + CalculateAgentForce() + CalculateWallForce();
+        //force += CalculateCrowdFollow();
 
         // to test flock behavior, uncomment the bottom code to override goal force
-        force = CalculateFlock() + CalculateAgentForce() + CalculateWallForce();
+        //force = CalculateFlock() + CalculateAgentForce() + CalculateWallForce();
 
         if (force != Vector3.zero)
         {
@@ -280,7 +280,7 @@ public class Agent : MonoBehaviour
 
     private Vector3 CalculateCrowdFollow()
     {
-        var weight = 4.0f;
+        var weight = 10.0f;
         var averageForce = Vector3.zero;
 
         if (path.Count == 0)
@@ -305,7 +305,6 @@ public class Agent : MonoBehaviour
             return averageForce;
 
         averageForce /= count;
-
         var desiredVel = averageForce.normalized * Mathf.Min(averageForce.magnitude, weight);
         return mass * (desiredVel - rb.velocity) / Parameters.T;
     }
