@@ -42,9 +42,9 @@ public class Agent : MonoBehaviour
         GetComponent<SphereCollider>().radius = perceptionRadius / 2;
 
         //Leader/Follower
-        // agents = new List<GameObject>(AgentManager.agentsObjs.Keys);
-        // agents[0].name = "Leader";
-        // leader = GameObject.Find("Leader");
+        agents = new List<GameObject>(AgentManager.agentsObjs.Keys);
+        agents[0].name = "Leader";
+        leader = GameObject.Find("Leader");
     }
 
     private void Update()
@@ -135,14 +135,22 @@ public class Agent : MonoBehaviour
         //force = CalculateFlock() + CalculateAgentForce() + CalculateWallForce();
 
         //Leader/Follower
-        // force -= CalculateGoalForce();
-        // if((rb.name).Equals("Leader"))
-        // {
-        //     force +=CalculateGoalForce();
-        // } else
-        // {
-        //     force += calculateFollowerForce();
-        // }
+        force -= CalculateGoalForce();
+        if((rb.name).Equals("Leader"))
+        {
+            
+            if(path.Count == 0)
+            {
+                force = Vector3.zero;
+            } else
+            {
+                force += CalculateGoalForce();
+            }
+            
+        } else
+        {
+            force += calculateFollowerForce() + CalculateBehindForce();
+        }
 
         if (force != Vector3.zero)
         {
@@ -284,25 +292,48 @@ public class Agent : MonoBehaviour
         //Detect if agent is in front of leader
         var temp = (transform.position - leader.transform.position).normalized;
         var dot = Vector3.Dot(temp, leader.transform.forward);
+        //var angle = Vector3.Angle(leader.transform.forward, rb.position-transform.position);
 
         //Agent is in front of leader
         if(dot > 0)
         {
             var magnitude = Mathf.Exp(-Vector3.Angle(leaderVelocity, rb.velocity));
-            //Debug.Log("Angular Derivation: "+Vector3.Angle(leaderVelocity, rb.velocity));
-            //Debug.Log("Leader Velocity: "+leaderVelocity);
-            //Debug.Log("rb.velocity: "+rb.velocity);
-            //Debug.Log("Magnitude: "+ magnitude);
-            var tangent = Vector3.Cross(Vector3.up, temp);
-            //Debug.Log("tangent: "+tangent);
-            var tangental_velocity = Vector3.Dot(rb.velocity, tangent);
+            Debug.Log("Angular Derivation: "+Vector3.Angle(leaderVelocity, rb.velocity));
+            Debug.Log("Leader Velocity: "+leaderVelocity);
+            Debug.Log("rb.velocity: "+rb.velocity);
+            Debug.Log("Magnitude: "+ magnitude);
+            var tangent = Vector3.Cross(Vector3.forward, temp);
+            Debug.Log("tangent: "+tangent);
+            //var tangental_velocity = Vector3.Dot(rb.velocity, tangent);
             //Debug.Log("tangental_velocity: "+tangental_velocity);
 
-            force = tangental_velocity * ((float)magnitude) * tangent;
+            force = ((float)magnitude) * tangent;
             force.y = 0;
         }
         return force;
     }
+
+    private Vector3 CalculateBehindForce()
+    {
+        if (path.Count == 0)
+        {
+            return Vector3.zero;
+        }
+
+        var velocity = (leader.transform.position - transform.position).normalized * Mathf.Min((leader.transform.position - transform.position).magnitude, Parameters.maxSpeed);
+        return mass * (velocity - rb.velocity) / Parameters.T;
+
+        /*
+        var val = temp.normalized * Mathf.Min(temp.magnitude, Parameters.maxSpeed);
+
+        Debug.Log(mass);
+        Vector3 distanceToDestination = (rb.position - nma.destination).normalized;
+        var val2 = distanceToDestination * Mathf.Min(distanceToDestination.magnitude, Parameters.maxSpeed);
+        //Debug.Log(mass * (((Parameters.maxSpeed * val) - rb.velocity) / Parameters.T));
+        return mass * (((Parameters.maxSpeed * val) - rb.velocity) / Parameters.T);
+        */
+    }
+
 
     public void ApplyForce()
     {
