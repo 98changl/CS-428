@@ -49,6 +49,8 @@ public class Agent : MonoBehaviour
 
     private void Update()
     {
+        //deformAgents();
+
         if (path.Count > 1 && Vector3.Distance(transform.position, path[0]) < 1.1f)
         {
             path.RemoveAt(0);
@@ -219,6 +221,32 @@ public class Agent : MonoBehaviour
         return agentForce;
     }
 
+    private void deformAgents()
+    {
+        foreach (var n in perceivedNeighbors)
+        {
+            if (!AgentManager.IsAgent(n))
+            {
+                continue;
+            }
+
+            var neighbor = AgentManager.agentsObjs[n];
+            
+            var distanceToDeform = Vector3.Distance(transform.position, neighbor.transform.position);
+
+            if(distanceToDeform < 2f)
+            {
+                gameObject.transform.localScale = new Vector3(Mathf.Min(1, distanceToDeform) * radius, 1, Mathf.Min(1, distanceToDeform) * radius);
+            }
+            else
+            {
+                gameObject.transform.localScale = new Vector3(2 * radius, 1, 2 * radius);
+            }
+
+        }
+    }
+
+
     private Vector3 CalculateWallForce()
     {
         var wallForce = Vector3.zero;
@@ -294,7 +322,7 @@ public class Agent : MonoBehaviour
         var dot = Vector3.Dot(temp, leader.transform.forward);
 
         //Agent is in front of leader
-        if(dot > 0)
+        if(dot >= 0)
         {
             var magnitude = Mathf.Exp(-Vector3.Angle(leaderVelocity, rb.velocity));
             var tangent = Vector3.Cross(Vector3.forward, temp);
