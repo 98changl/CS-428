@@ -42,7 +42,7 @@ public class Agent : MonoBehaviour
         GetComponent<SphereCollider>().radius = perceptionRadius / 2;
 
         //Leader/Follower
-        //  agents = new List<GameObject>(AgentManager.agentsObjs.Keys);
+        // agents = new List<GameObject>(AgentManager.agentsObjs.Keys);
         // agents[0].name = "Leader";
         // leader = GameObject.Find("Leader");
     }
@@ -288,9 +288,15 @@ public class Agent : MonoBehaviour
         //Agent is in front of leader
         if(dot > 0)
         {
-            var magnitude = Mathf.Exp(Vector3.Angle(leaderVelocity, rb.velocity));
+            var magnitude = Mathf.Exp(-Vector3.Angle(leaderVelocity, rb.velocity));
+            //Debug.Log("Angular Derivation: "+Vector3.Angle(leaderVelocity, rb.velocity));
+            //Debug.Log("Leader Velocity: "+leaderVelocity);
+            //Debug.Log("rb.velocity: "+rb.velocity);
+            //Debug.Log("Magnitude: "+ magnitude);
             var tangent = Vector3.Cross(Vector3.up, temp);
+            //Debug.Log("tangent: "+tangent);
             var tangental_velocity = Vector3.Dot(rb.velocity, tangent);
+            //Debug.Log("tangental_velocity: "+tangental_velocity);
 
             force = tangental_velocity * ((float)magnitude) * tangent;
             force.y = 0;
