@@ -234,6 +234,7 @@
     <Compile Include="Assets\Scripts\CleanScript.cs" />
     <Compile Include="Assets\Scripts\CoughEmitter.cs" />
     <Compile Include="Assets\Scripts\DemoBT.cs" />
+    <Compile Include="Assets\Scripts\DestinationController.cs" />
     <Compile Include="Assets\Scripts\IKBT2.cs" />
     <Compile Include="Assets\Scripts\VirusScript.cs" />
     <Reference Include="Unity.Timeline.Editor">
