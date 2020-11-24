@@ -12,7 +12,7 @@ public class DestinationController : MonoBehaviour
     {
         transform.position = new Vector3(agent.transform.position.x, agent.transform.position.y + 23, agent.transform.position.z - 14);
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(1))
         {
             RaycastHit hit;
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100))
