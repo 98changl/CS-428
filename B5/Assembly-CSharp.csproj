@@ -231,6 +231,7 @@
     <Compile Include="Assets\IKBT.cs" />
     <Compile Include="Assets\MyBehaviorTree.cs" />
     <Compile Include="Assets\MyBehaviorTree2.cs" />
+    <Compile Include="Assets\Scripts\BehaviorTree.cs" />
     <Compile Include="Assets\Scripts\CleanScript.cs" />
     <Compile Include="Assets\Scripts\CoughEmitter.cs" />
     <Compile Include="Assets\Scripts\DemoBT.cs" />
