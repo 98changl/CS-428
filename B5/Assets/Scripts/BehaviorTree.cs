@@ -65,17 +65,16 @@ public class BehaviorTree : MonoBehaviour
     {
         input = 0;
 
-        return new Sequence(
+        return
             new SelectorParallel(
                 //ExplodeBombFirst(),
                 PickPocket()
-                )
-        );
+                );
     }
 
     protected Node BuildTreeRoot()
     {
-        Node roaming = new DecoratorLoop(
+        Node mainStory = new DecoratorLoop(
             new Sequence(
                 new SelectorParallel(
                     ExplodeBombFirst(),
@@ -83,7 +82,7 @@ public class BehaviorTree : MonoBehaviour
                     )
                 )           
         );
-		return roaming;
+		return mainStory;
 	}
 
     public void inputButton(int option)
