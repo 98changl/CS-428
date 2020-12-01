@@ -11,6 +11,7 @@ public class DialogueManager : MonoBehaviour
     public GameObject hacker;
 
     public Canvas dialogueWindow;
+    public Canvas dialogueWindowHacker;
 
     private string EVIL_TEXT_NODE0 = "I am Dr Evil and I have rigged a binary bomb that will blow up this entire game unless my demands are met!";
     private string EVIL_TEXT_NODE2 = "All you have to do is steal the keys to the hacker's car and deliver them to me.";
@@ -34,12 +35,20 @@ public class DialogueManager : MonoBehaviour
     private void Start()
     {
         dialogueWindow.enabled = false;
+        dialogueWindowHacker.enabled = false;
+
         var mainTextBox = dialogueWindow.GetComponentInChildren<UnityEngine.UI.Text>();
         var button1 = dialogueWindow.GetComponentInChildren<UnityEngine.UI.Button>().GetComponentInChildren<UnityEngine.UI.Text>();
         var button2 = dialogueWindow.GetComponentInChildren<UnityEngine.UI.Button>().GetComponentInChildren<UnityEngine.UI.Text>();
         var button3 = dialogueWindow.GetComponentInChildren<UnityEngine.UI.Button>().GetComponentInChildren<UnityEngine.UI.Text>();
 
+        var mainTextBoxHacker = dialogueWindowHacker.GetComponentInChildren<UnityEngine.UI.Text>();
+        var button1Hacker = dialogueWindowHacker.GetComponentInChildren<UnityEngine.UI.Button>().GetComponentInChildren<UnityEngine.UI.Text>();
+        var button2Hacker = dialogueWindowHacker.GetComponentInChildren<UnityEngine.UI.Button>().GetComponentInChildren<UnityEngine.UI.Text>();
+        var button3Hacker = dialogueWindowHacker.GetComponentInChildren<UnityEngine.UI.Button>().GetComponentInChildren<UnityEngine.UI.Text>();
+
         mainTextBox.text = EVIL_TEXT_NODE0;
+        mainTextBoxHacker.text = "Hacker";
 
         button1.text = "Debugger";
 
@@ -53,13 +62,18 @@ public class DialogueManager : MonoBehaviour
         float distanceToEvil = (mainCharacter.transform.position - drEvil.transform.position).magnitude;
         float distanceToHacker = (mainCharacter.transform.position - hacker.transform.position).magnitude;
 
-        if (distanceToEvil <= 2.5f || distanceToHacker <= 2.5f)
+        if (distanceToEvil <= 2.5f)
         {
             dialogueWindow.enabled = true;
+        }
+        else if (distanceToHacker <= 2.5f)
+        {
+            dialogueWindowHacker.enabled = true;
         }
         else
         {
             dialogueWindow.enabled = false;
+            dialogueWindowHacker.enabled = false;
         }   
     }
 

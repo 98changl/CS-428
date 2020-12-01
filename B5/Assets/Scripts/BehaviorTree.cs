@@ -15,7 +15,8 @@ public class BehaviorTree : MonoBehaviour
         ROOT = 0,
         EVIL,
         HACKER,
-        EXPLODE
+        EXPLODE,
+        PICKPOCKET
     }
 
     private StoryArc currArc = StoryArc.ROOT;
@@ -38,10 +39,38 @@ public class BehaviorTree : MonoBehaviour
     private Node ExplodeBombFirst()
     {
             return new Sequence(
-                new LeafAssert(() => input == 1),
-                new LeafInvoke(() => currArc = StoryArc.EXPLODE)
-                );
-        
+                new LeafInvoke(() => {
+                    if(input == 1)
+                    {
+                        currArc = StoryArc.EXPLODE;
+                    }
+                })
+            );
+    }
+
+    private Node PickPocket()
+    {
+        return new Sequence(
+                new LeafInvoke(() => {
+
+                    if (input == 4)
+                    {
+                        currArc = StoryArc.PICKPOCKET;
+                    }
+                })
+            );
+    }
+
+    private Node EvilSequence()
+    {
+        input = 0;
+
+        return new Sequence(
+            new SelectorParallel(
+                //ExplodeBombFirst(),
+                PickPocket()
+                )
+        );
     }
 
     protected Node BuildTreeRoot()
@@ -49,7 +78,8 @@ public class BehaviorTree : MonoBehaviour
         Node roaming = new DecoratorLoop(
             new Sequence(
                 new SelectorParallel(
-                    ExplodeBombFirst()
+                    ExplodeBombFirst(),
+                    EvilSequence()
                     )
                 )           
         );
