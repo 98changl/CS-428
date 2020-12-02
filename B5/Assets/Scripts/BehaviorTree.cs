@@ -81,7 +81,7 @@ public class BehaviorTree : MonoBehaviour
         return new Sequence(
                 new LeafInvoke(() =>
                 {
-                    if (input == 4 && currArc == StoryArc.NODE2)
+                    if (input == 1 && currArc == StoryArc.NODE2)
                     {
                         currArc = StoryArc.NODE4;
                         input = 0;
@@ -95,7 +95,7 @@ public class BehaviorTree : MonoBehaviour
         return new Sequence(
                 new LeafInvoke(() =>
                 {
-                    if (input == 5 && currArc == StoryArc.NODE2)
+                    if (input == 4 && currArc == StoryArc.NODE2)
                     {
                         currArc = StoryArc.NODE5;
                         input = 0;
@@ -109,7 +109,7 @@ public class BehaviorTree : MonoBehaviour
         return new Sequence(
                 new LeafInvoke(() =>
                 {
-                    if (input == 6 && currArc == StoryArc.NODE2)
+                    if (input == 5 && currArc == StoryArc.NODE2)
                     {
                         var rand = UnityEngine.Random.Range(0,10);
                         Debug.Log("Rand : " + rand);
