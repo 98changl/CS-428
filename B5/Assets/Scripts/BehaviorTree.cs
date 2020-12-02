@@ -38,49 +38,38 @@ public class BehaviorTree : MonoBehaviour
 
     private Node ExplodeBombFirst()
     {
-            return new Sequence(
-                new LeafInvoke(() => {
-                    if(input == 1)
+        return new Sequence(
+                new LeafInvoke(() =>
+                {
+                    if (input == 1)
                     {
                         currArc = StoryArc.EXPLODE;
                     }
-                })
-            );
+                }))
+                ;
     }
 
     private Node PickPocket()
     {
         return new Sequence(
-                new LeafInvoke(() => {
-
+                new LeafInvoke(() =>
+                {
                     if (input == 4)
                     {
                         currArc = StoryArc.PICKPOCKET;
                     }
-                })
-            );
-    }
-
-    private Node EvilSequence()
-    {
-        input = 0;
-
-        return
-            new SelectorParallel(
-                //ExplodeBombFirst(),
-                PickPocket()
-                );
+                }));
     }
 
     protected Node BuildTreeRoot()
     {
         Node mainStory = new DecoratorLoop(
             new Sequence(
-                new SelectorParallel(
+            new SelectorParallel(
                     ExplodeBombFirst(),
-                    EvilSequence()
-                    )
-                )           
+                    PickPocket()
+                )
+            )
         );
 		return mainStory;
 	}

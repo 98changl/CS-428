@@ -1,73 +1,98 @@
-0b5a737 was Christopher Clemente, 2 hours ago, message: Completed the spiral functionality
-0c217c7 was 98changl, 2 days ago, message: Added CalculateAgentForce and CalculateWallForce
-d30fed6 was Christopher Clemente, 3 days ago, message: Updated the way that the destination variable is changed. No functional differences
-069fd6d was Christopher Clemente, 3 days ago, message: FINALLY FIXED THE DESTINATION SELECTION. Goal Force works
-f8b26be was Christopher Clemente, 3 days ago, message: Added commented code block for goal force
-7de7646 was Christopher Clemente, 3 days ago, message: Goal force not as broken as before but still broken.
-976c972 was Christopher Clemente, 4 days ago, message: Worked on Calculate Goal Force but all the agents freak out
-6294f7d was Christopher Clemente, 4 days ago, message: Added raycast for camera to move agents
-71e64d0 was Christopher Clemente, 5 days ago, message: Added camera controller from project B2
-6375378 was John Aceto, 6 days ago, message: B4 Initial Commit
-ae8a387 was Christopher Clemente, 8 days ago, message: Merge branch 'master' of https://github.com/98changl/CS-428
-a0c9468 was Christopher Clemente, 8 days ago, message: Final Push
-caa6b93 was John Aceto, 8 days ago, message: Uploaded README
-39537ad was 98changl, 8 days ago, message: Working Unity Collisions
-6e904d4 was 98changl, 9 days ago, message: Changed pointsIn() to detect edges instead of corners
-7b6a643 was Christopher Clemente, 9 days ago, message: Add EPA algorithm
-6da62ef was 98changl, 9 days ago, message: Improved the efficiency of QuadTreeNode getCollisionList() and QuadTree initialization
-d3a8dcf was 98changl, 12 days ago, message: Working Potential Collisions with data structure
-2310334 was 98changl, 12 days ago, message: Reworked QuadTreeNodes to store quadrant data and list of prisms in quadrant
-680c2d2 was 98changl, 12 days ago, message: Attempted resolution to Unity freezing
-6c06f80 was 98changl, 12 days ago, message: Changed QuadTreeNode insert to return with one node insert and more accurate results
-4b4fb50 was 98changl, 13 days ago, message: Created QuadTreeNode data structure for PotentialCollisions
-b3039bf was Christopher Clemente, 3 weeks ago, message: Minkowski Difference and GJK done, needs penetration depth.
-53ab0d7 was John Aceto, 3 weeks ago, message: Finished Hand and Head IK. Foot IK not working.
-9c6a01f was Luis Figueroa, 3 weeks ago, message: part 3, agents stop properly
-c200a24 was 98changl, 3 weeks ago, message: Implemented right click select, left click move
-6ee7302 was 98changl, 3 weeks ago, message: Implemented agent movement pause with multiple agents and changed agent_deselected color to red
-31ab522 was 98changl, 3 weeks ago, message: Merge branch 'master' of https://github.com/98changl/CS-428 into master
-87c0b6d was 98changl, 3 weeks ago, message: Added off-mesh link jumps and multiple clicks feature to AgentController
-73d07ed was Christopher Clemente, 3 weeks ago, message: Initial commit B3
-5868fb6 was 98changl, 3 weeks ago, message: Pushing code again
-0c1982c was 98changl, 3 weeks ago, message: Created new Agent_Skeleton_Animated prefab for part 2 and 3. Implemented agent selection to the Agent_Skeleton_Animated prefab.
-9db0803 was 98changl, 3 weeks ago, message: Moved PlayerController to Scripts folder and created Scene for Part 2
-03801ac was Luis Figueroa, 3 weeks ago, message: Added navmesh and offlinks mesh
-a273069 was Luis Figueroa, 3 weeks ago, message: Added scene for part 3
-fbd2dd1 was 98changl, 4 weeks ago, message: Added AgentController, Direction, and CameraController
-3425def was Christopher Clemente, 4 weeks ago, message: Clean up PlayerController code a bit.
-96e245f was Christopher Clemente, 4 weeks ago, message: Jumping animations added to character.
-852127d was Christopher Clemente, 4 weeks ago, message: Added required blend trees and added 2d freeform cartesian trees. I still need to add the jump animation.
-8a68636 was Christopher Clemente, 4 weeks ago, message: Added sprint
-d56d345 was Christopher Clemente, 4 weeks ago, message: Walking forward animation syncs when moving forward
-4e570f3 was Christopher Clemente, 4 weeks ago, message: Worked on animation blend trees and created movement script for the character
-9f09fbb was Christopher Clemente, 5 weeks ago, message: Update JumpUpHigh.fbm.meta
-f2d2204 was Christopher Clemente, 5 weeks ago, message: Initial Commit
-2b76519 was Christopher Clemente, 6 weeks ago, message: Changed Priority on adversarial agents
-cf113b2 was 98changl, 6 weeks ago, message: Update README.txt
-111ad55 was 98changl, 6 weeks ago, message: Update README.txt
-7bba064 was unknown, 6 weeks ago, message: <Added extra credit A-Star algorithm and Custom Agent implemented with A-Star>
-a05eb64 was Christopher Clemente, 6 weeks ago, message: Added in different weight values and moved around adversarial agents so they werent blocking the regular agents.
-0ed87f3 was 98changl, 6 weeks ago, message: Update README.txt
-baaa71c was John Aceto, 6 weeks ago, message: Update README.txt
-0fb3b5f was John Aceto, 6 weeks ago, message: Created adversarial agent.
-67eee7b was John Aceto, 6 weeks ago, message: Added rigid body component to all agents including the prefab folder
-a44c573 was John Aceto, 6 weeks ago, message: Changed camera controls to use shift instead of control. Changed comment in agent script.
-3a11b53 was John Aceto, 6 weeks ago, message: Update README.md
-18a2f1c was Luis Figueroa, 7 weeks ago, message: Added Dynamic Obstacles
-a219bf8 was Luis Figueroa, 7 weeks ago, message: Added dynamic Obstacles. agent stopping distance set to 1.5
-77cf786 was Christopher Clemente, 7 weeks ago, message: Update log.txt
-b1c67c7 was Christopher Clemente, 7 weeks ago, message: Agent bug fixes, added more agents into the scene, and made a controllable obstacle.
-acb603d was Christopher Clemente, 7 weeks ago, message: Added Agent Scripting
-a4b16f5 was Christopher Clemente, 7 weeks ago, message: Update log.txt
-d84bda6 was Race_Condition, 7 weeks ago, message: Expanded the scene, as well as added mazes, ramps, levels and a nav mesh.
-82a90be was Christopher Clemente, 7 weeks ago, message: Added blank scene with a camera script to move/look around.
-d0910e9 was Race_Condition, 7 weeks ago, message: Update README.md
-8b5f1c8 was lfigil, 7 weeks ago, message: Update README.md
-eb25b5f was 98changl, 8 weeks ago, message: Create README.txt
-d394560 was 98changl, 8 weeks ago, message: Delete test.txt
-8ec5371 was 98changl, 8 weeks ago, message: Create README.md
-042a5e8 was 98changl, 8 weeks ago, message: Add files via upload
-0ddb248 was 98changl, 8 weeks ago, message: Delete README.txt
-e3f47d0 was 98changl, 8 weeks ago, message: Create README.txt
-fdc5cae was 98changl, 8 weeks ago, message: Create test.txt
-3c40976 was 98changl, 8 weeks ago, message: Create README.txt
+ecd3a4a was Christopher Clemente, 8 hours ago, message: Binary tree still broken, most recent
+2ea14e8 was Christopher Clemente, 10 hours ago, message: Split dialogue between 2 canvas objects and worked on tree
+f90d786 was Christopher Clemente, 14 hours ago, message: Worked on the IBT and passing user interaction through the UI to the script
+0b09f7a was Christopher Clemente, 35 hours ago, message: Made additional improvements to dialogue system
+4a91b0c was Christopher Clemente, 7 days ago, message: Added Dialogue UI and manager
+1c0855d was Christopher Clemente, 12 days ago, message: Updated scene and added camera/agent controller script
+bdbde02 was Christopher Clemente, 12 days ago, message: Added changes to scene
+2dc0685 was Christopher Clemente, 2 weeks ago, message: Added MainScene
+f9bd087 was Christopher Clemente, 2 weeks ago, message: Initial Push
+ea86eb1 was Christopher Clemente, 3 weeks ago, message: Final Push
+72d5482 was John Aceto, 3 weeks ago, message: Cleaned up code
+40bee22 was John Aceto, 3 weeks ago, message: Fixed leader follower
+49ed75a was John Aceto, 3 weeks ago, message: FollowerForce Adjustments
+1ce60be was John Aceto, 3 weeks ago, message: Added leader/follower to agent.cs
+1b36449 was Christopher Clemente, 3 weeks ago, message: Added comment to pursue and evade
+cefc232 was Christopher Clemente, 3 weeks ago, message: All thats needed now is LeaderFollowing
+b6fecd7 was 98changl, 3 weeks ago, message: Implemented Crowd Following
+d3eac09 was 98changl, 3 weeks ago, message: Working full flock implementation
+d135105 was 98changl, 3 weeks ago, message: Updated full flock implementation
+fd5282e was Christopher Clemente, 3 weeks ago, message: update
+e3da098 was Christopher Clemente, 3 weeks ago, message: Camera changes
+0fa89ee was 98changl, 3 weeks ago, message: Updated social forces for part 1
+8957467 was 98changl, 3 weeks ago, message: Added full flock implementation functions
+b8cbb5a was 98changl, 3 weeks ago, message: Changed agent forces
+ade018d was Christopher Clemente, 3 weeks ago, message: Changed Spiral again.
+0b5a737 was Christopher Clemente, 3 weeks ago, message: Completed the spiral functionality
+0c217c7 was 98changl, 3 weeks ago, message: Added CalculateAgentForce and CalculateWallForce
+d30fed6 was Christopher Clemente, 4 weeks ago, message: Updated the way that the destination variable is changed. No functional differences
+069fd6d was Christopher Clemente, 4 weeks ago, message: FINALLY FIXED THE DESTINATION SELECTION. Goal Force works
+f8b26be was Christopher Clemente, 4 weeks ago, message: Added commented code block for goal force
+7de7646 was Christopher Clemente, 4 weeks ago, message: Goal force not as broken as before but still broken.
+976c972 was Christopher Clemente, 4 weeks ago, message: Worked on Calculate Goal Force but all the agents freak out
+6294f7d was Christopher Clemente, 4 weeks ago, message: Added raycast for camera to move agents
+71e64d0 was Christopher Clemente, 4 weeks ago, message: Added camera controller from project B2
+6375378 was John Aceto, 4 weeks ago, message: B4 Initial Commit
+ae8a387 was Christopher Clemente, 4 weeks ago, message: Merge branch 'master' of https://github.com/98changl/CS-428
+a0c9468 was Christopher Clemente, 4 weeks ago, message: Final Push
+caa6b93 was John Aceto, 4 weeks ago, message: Uploaded README
+39537ad was 98changl, 4 weeks ago, message: Working Unity Collisions
+6e904d4 was 98changl, 5 weeks ago, message: Changed pointsIn() to detect edges instead of corners
+7b6a643 was Christopher Clemente, 5 weeks ago, message: Add EPA algorithm
+6da62ef was 98changl, 5 weeks ago, message: Improved the efficiency of QuadTreeNode getCollisionList() and QuadTree initialization
+d3a8dcf was 98changl, 5 weeks ago, message: Working Potential Collisions with data structure
+2310334 was 98changl, 5 weeks ago, message: Reworked QuadTreeNodes to store quadrant data and list of prisms in quadrant
+680c2d2 was 98changl, 5 weeks ago, message: Attempted resolution to Unity freezing
+6c06f80 was 98changl, 5 weeks ago, message: Changed QuadTreeNode insert to return with one node insert and more accurate results
+4b4fb50 was 98changl, 5 weeks ago, message: Created QuadTreeNode data structure for PotentialCollisions
+b3039bf was Christopher Clemente, 6 weeks ago, message: Minkowski Difference and GJK done, needs penetration depth.
+53ab0d7 was John Aceto, 6 weeks ago, message: Finished Hand and Head IK. Foot IK not working.
+9c6a01f was Luis Figueroa, 6 weeks ago, message: part 3, agents stop properly
+c200a24 was 98changl, 6 weeks ago, message: Implemented right click select, left click move
+6ee7302 was 98changl, 6 weeks ago, message: Implemented agent movement pause with multiple agents and changed agent_deselected color to red
+31ab522 was 98changl, 6 weeks ago, message: Merge branch 'master' of https://github.com/98changl/CS-428 into master
+87c0b6d was 98changl, 6 weeks ago, message: Added off-mesh link jumps and multiple clicks feature to AgentController
+73d07ed was Christopher Clemente, 6 weeks ago, message: Initial commit B3
+5868fb6 was 98changl, 7 weeks ago, message: Pushing code again
+0c1982c was 98changl, 7 weeks ago, message: Created new Agent_Skeleton_Animated prefab for part 2 and 3. Implemented agent selection to the Agent_Skeleton_Animated prefab.
+9db0803 was 98changl, 7 weeks ago, message: Moved PlayerController to Scripts folder and created Scene for Part 2
+03801ac was Luis Figueroa, 7 weeks ago, message: Added navmesh and offlinks mesh
+a273069 was Luis Figueroa, 7 weeks ago, message: Added scene for part 3
+fbd2dd1 was 98changl, 7 weeks ago, message: Added AgentController, Direction, and CameraController
+3425def was Christopher Clemente, 7 weeks ago, message: Clean up PlayerController code a bit.
+96e245f was Christopher Clemente, 7 weeks ago, message: Jumping animations added to character.
+852127d was Christopher Clemente, 8 weeks ago, message: Added required blend trees and added 2d freeform cartesian trees. I still need to add the jump animation.
+8a68636 was Christopher Clemente, 8 weeks ago, message: Added sprint
+d56d345 was Christopher Clemente, 8 weeks ago, message: Walking forward animation syncs when moving forward
+4e570f3 was Christopher Clemente, 8 weeks ago, message: Worked on animation blend trees and created movement script for the character
+9f09fbb was Christopher Clemente, 8 weeks ago, message: Update JumpUpHigh.fbm.meta
+f2d2204 was Christopher Clemente, 8 weeks ago, message: Initial Commit
+2b76519 was Christopher Clemente, 9 weeks ago, message: Changed Priority on adversarial agents
+cf113b2 was 98changl, 9 weeks ago, message: Update README.txt
+111ad55 was 98changl, 9 weeks ago, message: Update README.txt
+7bba064 was unknown, 9 weeks ago, message: <Added extra credit A-Star algorithm and Custom Agent implemented with A-Star>
+a05eb64 was Christopher Clemente, 9 weeks ago, message: Added in different weight values and moved around adversarial agents so they werent blocking the regular agents.
+0ed87f3 was 98changl, 9 weeks ago, message: Update README.txt
+baaa71c was John Aceto, 10 weeks ago, message: Update README.txt
+0fb3b5f was John Aceto, 10 weeks ago, message: Created adversarial agent.
+67eee7b was John Aceto, 10 weeks ago, message: Added rigid body component to all agents including the prefab folder
+a44c573 was John Aceto, 10 weeks ago, message: Changed camera controls to use shift instead of control. Changed comment in agent script.
+3a11b53 was John Aceto, 10 weeks ago, message: Update README.md
+18a2f1c was Luis Figueroa, 2 months ago, message: Added Dynamic Obstacles
+a219bf8 was Luis Figueroa, 2 months ago, message: Added dynamic Obstacles. agent stopping distance set to 1.5
+77cf786 was Christopher Clemente, 2 months ago, message: Update log.txt
+b1c67c7 was Christopher Clemente, 2 months ago, message: Agent bug fixes, added more agents into the scene, and made a controllable obstacle.
+acb603d was Christopher Clemente, 2 months ago, message: Added Agent Scripting
+a4b16f5 was Christopher Clemente, 2 months ago, message: Update log.txt
+d84bda6 was Race_Condition, 2 months ago, message: Expanded the scene, as well as added mazes, ramps, levels and a nav mesh.
+82a90be was Christopher Clemente, 2 months ago, message: Added blank scene with a camera script to move/look around.
+d0910e9 was Race_Condition, 2 months ago, message: Update README.md
+8b5f1c8 was lfigil, 2 months ago, message: Update README.md
+eb25b5f was 98changl, 3 months ago, message: Create README.txt
+d394560 was 98changl, 3 months ago, message: Delete test.txt
+8ec5371 was 98changl, 3 months ago, message: Create README.md
+042a5e8 was 98changl, 3 months ago, message: Add files via upload
+0ddb248 was 98changl, 3 months ago, message: Delete README.txt
+e3f47d0 was 98changl, 3 months ago, message: Create README.txt
+fdc5cae was 98changl, 3 months ago, message: Create test.txt
+3c40976 was 98changl, 3 months ago, message: Create README.txt
