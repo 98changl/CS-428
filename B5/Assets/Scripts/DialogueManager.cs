@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 
 public class DialogueManager : MonoBehaviour
@@ -9,6 +10,13 @@ public class DialogueManager : MonoBehaviour
     public GameObject mainCharacter;
     public GameObject drEvil;
     public GameObject hacker;
+
+    public Button button1;
+    public Button button2;
+    public Button button3;
+    public Button button4;
+    public Button button5;
+    public Button button6;
 
     public Canvas dialogueWindow;
     public Canvas dialogueWindowHacker;
@@ -38,9 +46,6 @@ public class DialogueManager : MonoBehaviour
         dialogueWindowHacker.enabled = false;
 
         var mainTextBox = dialogueWindow.GetComponentInChildren<UnityEngine.UI.Text>();
-        var button1 = dialogueWindow.GetComponentInChildren<UnityEngine.UI.Button>().GetComponentInChildren<UnityEngine.UI.Text>();
-        var button2 = dialogueWindow.GetComponentInChildren<UnityEngine.UI.Button>().GetComponentInChildren<UnityEngine.UI.Text>();
-        var button3 = dialogueWindow.GetComponentInChildren<UnityEngine.UI.Button>().GetComponentInChildren<UnityEngine.UI.Text>();
 
         var mainTextBoxHacker = dialogueWindowHacker.GetComponentInChildren<UnityEngine.UI.Text>();
         var button1Hacker = dialogueWindowHacker.GetComponentInChildren<UnityEngine.UI.Button>().GetComponentInChildren<UnityEngine.UI.Text>();
@@ -48,9 +53,17 @@ public class DialogueManager : MonoBehaviour
         var button3Hacker = dialogueWindowHacker.GetComponentInChildren<UnityEngine.UI.Button>().GetComponentInChildren<UnityEngine.UI.Text>();
 
         mainTextBox.text = EVIL_TEXT_NODE0;
-        mainTextBoxHacker.text = "Hacker";
 
-        button1.text = "Debugger";
+        button1.GetComponentInChildren<UnityEngine.UI.Text>().text = BUTTON1_NODE0;
+        button2.GetComponentInChildren<UnityEngine.UI.Text>().text = BUTTON2_NODE0;
+        button3.GetComponentInChildren<UnityEngine.UI.Text>().text = BUTTON3_NODE0;
+
+        mainTextBoxHacker.text = HACKER_TEXT_NODE0;
+        button4.gameObject.SetActive(false);
+        button5.gameObject.SetActive(false);
+        button6.gameObject.SetActive(false);
+
+        //button1.text = "Debugger";
 
         //Debug.Log(mainTextBox);
     }
