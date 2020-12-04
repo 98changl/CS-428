@@ -7,7 +7,6 @@ public class BehaviorUpdater : MonoBehaviour
 {
     public float updateTime = 0.05f;
     protected float nextUpdate = 0.0f;
-
     private static BehaviorUpdater instance = null;
 
     void OnEnable()

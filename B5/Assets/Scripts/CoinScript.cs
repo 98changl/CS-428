@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CoinScript : MonoBehaviour
 {
+    public static int coins;
     // Start is called before the first frame update
     void Start()
     {
@@ -13,16 +14,21 @@ public class CoinScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.Rotate(90 * Time.deltaTime,0 ,0);
+        transform.Rotate(90 * Time.deltaTime,0 ,90 * Time.deltaTime);
     }
 
-    private void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider other)
     {
-        // Agent tag -> Player or Daniel
-        if (other.tag == "Daniel")
+        // // Agent tag -> Player or Daniel
+        if (other.tag == "Player")
         {
-            other.GetComponent<DisplayCoinsCollected>().coinsCollected++;
             Destroy(gameObject);
+            coins++;
         }
+    }
+
+    void OnGUI()
+    {
+        GUI.Label(new Rect(10,10,100,20), "Coins : " + coins);
     }
 }

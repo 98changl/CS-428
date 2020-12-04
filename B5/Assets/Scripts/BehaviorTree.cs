@@ -6,6 +6,8 @@ using TreeSharpPlus;
 public class BehaviorTree : MonoBehaviour
 {
 	public GameObject participant;
+    public GameObject coin;
+    public Transform Spawn1, Spawn2, Spawn3;
 	private BehaviorAgent behaviorAgent;
 
     private int input = 0;
@@ -137,6 +139,9 @@ public class BehaviorTree : MonoBehaviour
                 {
                     if (input == 3 && currArc == StoryArc.ROOT)
                     {
+                        Instantiate(coin, Spawn1.position, Spawn1.rotation);
+                        Instantiate(coin, Spawn2.position, Spawn2.rotation);
+                        Instantiate(coin, Spawn3.position, Spawn3.rotation);
                         currArc = StoryArc.NODE3;
                         input = 0;
                     }
