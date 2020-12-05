@@ -50,7 +50,6 @@ public class BehaviorTree : MonoBehaviour
     {
         //Debug.Log(input);
         Debug.Log(currArc);
-        //Debug.Log(input);
     }
 
     #region CheckArcs
@@ -66,7 +65,7 @@ public class BehaviorTree : MonoBehaviour
     private Node CheckButtonArc()
     {
         return new Sequence(
-                new LeafAssert(() => currArc == StoryArc.ROOT),
+                //new LeafAssert(() => currArc == StoryArc.ROOT),
                 new LeafAssert(() => (StoryArc)input == StoryArc.NODE1),
                 new LeafInvoke(() => currArc = StoryArc.NODE1)
                 );
@@ -209,6 +208,22 @@ public class BehaviorTree : MonoBehaviour
         return new Sequence(
                 CheckComplyArc(),
                 WaitForInput(),
+                new LeafInvoke(() =>
+                {
+                    // input is button num, change to arc input
+                    if (input == 1)
+                    {
+                        input = 4;
+                    }
+                    else if (input == 4)
+                    {
+                        input = 5;
+                    }
+                    else if (input == 5)
+                    {
+                        input = 6;
+                    }
+                }),
                 new Selector(
                     RefuseArc(),
                     PickpocketArc(),
@@ -231,8 +246,9 @@ public class BehaviorTree : MonoBehaviour
     {
         return new Sequence(
                 CheckRefuseArc(),
-                new LeafInvoke(() => currArc = StoryArc.NODE1),
-                GameOver()
+                WaitForInput(),
+                ButtonArc()
+                //GameOver()
                 );
     }
 
@@ -255,8 +271,11 @@ public class BehaviorTree : MonoBehaviour
                         input = (int)StoryArc.NODE9;
                     else
                         input = (int)StoryArc.NODE10;
-                })
-                );
+                }),
+                new Selector(
+                       LoseKeysArc(),
+                       WinKeysArc()
+                ));
     }
 
     private Node CoinsArc()
@@ -279,8 +298,11 @@ public class BehaviorTree : MonoBehaviour
                         input = (int)StoryArc.NODE11;
                     else
                         input = (int)StoryArc.NODE12;
-                })
-                );
+                }),
+                new Selector(
+                       LoseDefuseArc(),
+                       WinDefuseArc()
+                ));
     }
 
     private Node LoseKeysArc()
