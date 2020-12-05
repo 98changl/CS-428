@@ -234,8 +234,21 @@ public class BehaviorTree : MonoBehaviour
     private Node HackerArc()
     {
         return new Sequence(
+                MakeCoins(),
                 CheckHackerArc(),
                 WaitForInput(),
+                new LeafInvoke(() =>
+                {
+                    // input is button num, change to arc input
+                    if (input == 4)
+                    {
+                        input = 7;
+                    }
+                    else if (input == 5)
+                    {
+                        input = 8;
+                    }
+                }),
                 new Selector(
                     CoinsArc(),
                     ThreatenDefuseArc()
@@ -282,7 +295,7 @@ public class BehaviorTree : MonoBehaviour
     {
         return new Sequence(
                 CheckCoinsArc(),
-                MakeCoins(),
+                //MakeCoins(),
                 WaitForInput()
                 );
     }
@@ -317,7 +330,7 @@ public class BehaviorTree : MonoBehaviour
     {
         return new Sequence(
                 CheckWinKeysArc(),
-                new LeafInvoke(() => input = (int)StoryArc.NODE13)
+                GameOver()
                 );
     }
 
@@ -352,8 +365,8 @@ public class BehaviorTree : MonoBehaviour
     private Node GameOver()
     {
         return new Sequence(
-            new LeafInvoke(() => Time.timeScale = 0f),
-            new LeafInvoke(() => { return RunStatus.Failure; })
+            //new LeafInvoke(() => Time.timeScale = 0f),
+            new LeafInvoke(() => { return RunStatus.Running; })
             );
     }
 
