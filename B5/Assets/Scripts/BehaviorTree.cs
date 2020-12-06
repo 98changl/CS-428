@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections;
+//using System.Collections.Generic;
 using TreeSharpPlus;
+using RootMotion.FinalIK;
 
 public class BehaviorTree : MonoBehaviour
 {
@@ -11,11 +13,20 @@ public class BehaviorTree : MonoBehaviour
     public GameObject coin;
     public Transform Spawn1, Spawn2, Spawn3;
 
+    public GameObject coinParent;
     public DialogueManager dialogue;
 
-    private BehaviorAgent behaviorAgent;
+    //IK related interface
+    //public InteractionObject bomb;
+    //public FullBodyBipedEffector leftHand;
+    //public FullBodyBipedEffector rightHand;
+
 
     public int input = 0;
+
+    //List<GameObject> coinObjects;
+
+    private BehaviorAgent behaviorAgent;
 
     private enum StoryArc
     {
@@ -36,6 +47,7 @@ public class BehaviorTree : MonoBehaviour
     }
 
     private StoryArc currArc = StoryArc.ROOT;
+    private int coins = 0;
 
     // Use this for initialization
     void Start()
@@ -65,7 +77,7 @@ public class BehaviorTree : MonoBehaviour
     private Node CheckButtonArc()
     {
         return new Sequence(
-                //new LeafAssert(() => currArc == StoryArc.ROOT),
+                new LeafAssert(() => currArc == StoryArc.ROOT),
                 new LeafAssert(() => (StoryArc)input == StoryArc.NODE1),
                 new LeafInvoke(() => currArc = StoryArc.NODE1)
                 );
@@ -199,6 +211,7 @@ public class BehaviorTree : MonoBehaviour
     {
         return new Sequence(
                 CheckButtonArc(),
+                //PunchBomb(),
                 GameOver()
                 );
     }
@@ -234,8 +247,8 @@ public class BehaviorTree : MonoBehaviour
     private Node HackerArc()
     {
         return new Sequence(
-                MakeCoins(),
                 CheckHackerArc(),
+                MakeCoins(),
                 WaitForInput(),
                 new LeafInvoke(() =>
                 {
@@ -330,7 +343,9 @@ public class BehaviorTree : MonoBehaviour
     {
         return new Sequence(
                 CheckWinKeysArc(),
-                GameOver()
+                WaitForApproach(),
+                new LeafInvoke(() => input = (int)StoryArc.NODE13),
+                DeliverArc()
                 );
     }
 
@@ -360,6 +375,34 @@ public class BehaviorTree : MonoBehaviour
 
     #endregion
 
+    #region IK Functions
+
+    /*
+    protected Node PunchBomb()
+    {
+        return new Sequence(
+                new SequenceParallel(
+                        participant.GetComponent<BehaviorMecanim>().Node_StartInteraction(leftHand, bomb),
+                        participant.GetComponent<BehaviorMecanim>().Node_StartInteraction(rightHand, bomb)
+                    ),
+                    new LeafWait(1000),
+                    new SequenceParallel(
+                        participant.GetComponent<BehaviorMecanim>().Node_StopInteraction(leftHand),
+                        participant.GetComponent<BehaviorMecanim>().Node_StopInteraction(rightHand)
+                    )
+            );
+    }
+    */
+
+    protected Node PickUpCoins(GameObject coin)
+    {
+        return new Sequence(
+            
+            );
+    }
+
+    #endregion
+
     #region Functions
 
     private Node GameOver()
@@ -372,11 +415,41 @@ public class BehaviorTree : MonoBehaviour
 
     private Node MakeCoins()
     {
+        //coinObjects = new List<GameObject>();
         return new Sequence(
                 new LeafInvoke(() => Instantiate(coin, Spawn1.position, Spawn1.rotation)),
                 new LeafInvoke(() => Instantiate(coin, Spawn2.position, Spawn2.rotation)),
                 new LeafInvoke(() => Instantiate(coin, Spawn3.position, Spawn3.rotation))
                 );
+    }
+
+    private Node WaitForCoins()
+    {
+        return new DecoratorInvert(
+                new DecoratorLoop(
+                    new Sequence(
+                        new LeafInvoke(
+                            () =>
+                            {
+                                coins = 3;
+                            } 
+                        ),
+                        new LeafInvoke(
+                            () => {
+                                if (coins >= 3)
+                                {
+                                    return RunStatus.Failure;
+                                }
+                                else
+                                {
+                                    return RunStatus.Running;
+                                }
+                            }
+                        ),
+                        new LeafInvoke(() => Debug.Log("Coins: " + coins))
+                    )
+                )
+            );
     }
 
     private Node WaitForInput()
@@ -397,6 +470,30 @@ public class BehaviorTree : MonoBehaviour
                             }
                         ),
                         new LeafInvoke(() => Debug.Log(currArc))
+                    )
+                )
+            );
+    }
+
+    private Node WaitForApproach()
+    {
+       return new DecoratorInvert(
+                new DecoratorLoop(
+                    new Sequence(
+                        new LeafInvoke(
+                            () => {
+                                float distanceToEvil = (participant.transform.position - evil.transform.position).magnitude;
+
+                                if (distanceToEvil <= 2.5f)
+                                {
+                                    return RunStatus.Failure;
+                                }
+                                else
+                                {
+                                    return RunStatus.Running;
+                                }
+                            }
+                        )
                     )
                 )
             );
