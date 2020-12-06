@@ -1,12 +1,12 @@
 /target:library
 /nowarn:0169
-/out:Temp/com.unity.multiplayer-weaver.Editor.dll
-/unsafe
+/out:Temp/Assembly-CSharp-Editor.dll
 /debug:portable
 /optimize-
 /nostdlib+
 /preferreduilang:en-US
 /langversion:latest
+/reference:Library/ScriptAssemblies/Assembly-CSharp.dll
 /reference:"C:/Program Files/Unity/Hub/Editor/2019.1.3f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll"
 /reference:"C:/Program Files/Unity/Hub/Editor/2019.1.3f1/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll"
 /reference:"C:/Program Files/Unity/Hub/Editor/2019.1.3f1/Editor/Data/Managed/UnityEngine/UnityEngine.ARModule.dll"
@@ -67,6 +67,20 @@
 /reference:"C:/Program Files/Unity/Hub/Editor/2019.1.3f1/Editor/Data/Managed/UnityEngine/UnityEngine.XRModule.dll"
 /reference:"C:/Program Files/Unity/Hub/Editor/2019.1.3f1/Editor/Data/Managed/UnityEditor.dll"
 /reference:"C:/Program Files/Unity/Hub/Editor/2019.1.3f1/Editor/Data/Managed/Unity.Locator.dll"
+/reference:Library/ScriptAssemblies/Unity.Timeline.Editor.dll
+/reference:Library/ScriptAssemblies/com.unity.multiplayer-hlapi.Editor.dll
+/reference:Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll
+/reference:Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll
+/reference:Library/ScriptAssemblies/Unity.Timeline.dll
+/reference:Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll
+/reference:Library/ScriptAssemblies/com.unity.multiplayer-weaver.Editor.dll
+/reference:Library/ScriptAssemblies/UnityEngine.XR.LegacyInputHelpers.dll
+/reference:Library/ScriptAssemblies/UnityEditor.SpatialTracking.dll
+/reference:Library/ScriptAssemblies/UnityEngine.SpatialTracking.dll
+/reference:Library/ScriptAssemblies/Unity.TextMeshPro.dll
+/reference:Library/ScriptAssemblies/Unity.Analytics.DataPrivacy.dll
+/reference:Library/ScriptAssemblies/UnityEditor.XR.LegacyInputHelpers.dll
+/reference:Library/ScriptAssemblies/com.unity.multiplayer-hlapi.Runtime.dll
 /reference:"C:/Program Files/Unity/Hub/Editor/2019.1.3f1/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll"
 /reference:"C:/Program Files/Unity/Hub/Editor/2019.1.3f1/Editor/Data/UnityExtensions/Unity/GUISystem/Editor/UnityEditor.UI.dll"
 /reference:"C:/Program Files/Unity/Hub/Editor/2019.1.3f1/Editor/Data/UnityExtensions/Unity/TestRunner/Editor/UnityEditor.TestRunner.dll"
@@ -77,10 +91,11 @@
 /reference:"C:/Program Files/Unity/Hub/Editor/2019.1.3f1/Editor/Data/PlaybackEngines/windowsstandalonesupport/UnityEditor.WindowsStandalone.Extensions.dll"
 /reference:"C:/Program Files/Unity/Hub/Editor/2019.1.3f1/Editor/Data/PlaybackEngines/WebGLSupport/UnityEditor.WebGL.Extensions.dll"
 /reference:"C:/Program Files (x86)/Microsoft Visual Studio Tools for Unity/15.0/Editor/SyntaxTree.VisualStudio.Unity.Bridge.dll"
-/reference:C:/Users/chris/Desktop/CS-428/B5/Library/PackageCache/nuget.mono-cecil@0.1.5-preview/Mono.Cecil.dll
-/reference:C:/Users/chris/Desktop/CS-428/B5/Library/PackageCache/nuget.mono-cecil@0.1.5-preview/Mono.Cecil.Mdb.dll
-/reference:C:/Users/chris/Desktop/CS-428/B5/Library/PackageCache/nuget.mono-cecil@0.1.5-preview/Mono.Cecil.Pdb.dll
-/reference:C:/Users/chris/Desktop/CS-428/B5/Library/PackageCache/nuget.mono-cecil@0.1.5-preview/Mono.Cecil.Rocks.dll
+/reference:C:/Users/chris/Desktop/CS-428/B5/Library/PackageCache/com.unity.ads@2.0.8/Editor/UnityEditor.Advertisements.dll
+/reference:C:/Users/chris/Desktop/CS-428/B5/Library/PackageCache/com.unity.analytics@3.3.2/Unity.Analytics.Editor.dll
+/reference:C:/Users/chris/Desktop/CS-428/B5/Library/PackageCache/com.unity.analytics@3.3.2/Unity.Analytics.StandardEvents.dll
+/reference:C:/Users/chris/Desktop/CS-428/B5/Library/PackageCache/com.unity.analytics@3.3.2/Unity.Analytics.Tracker.dll
+/reference:C:/Users/chris/Desktop/CS-428/B5/Library/PackageCache/com.unity.purchasing@2.0.6/Editor/UnityEditor.Purchasing.dll
 /reference:"C:/Program Files/Unity/Hub/Editor/2019.1.3f1/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/mscorlib.dll"
 /reference:"C:/Program Files/Unity/Hub/Editor/2019.1.3f1/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/System.dll"
 /reference:"C:/Program Files/Unity/Hub/Editor/2019.1.3f1/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/System.Core.dll"
@@ -300,11 +315,38 @@
 /define:ENABLE_VSTU
 /define:CSHARP_7_OR_LATER
 /define:CSHARP_7_3_OR_NEWER
-C:\Users\chris\Desktop\CS-428\B5\Library\PackageCache\com.unity.multiplayer-hlapi@1.0.2\Editor\Tools\Weaver\AssemblyInfo.cs
-C:\Users\chris\Desktop\CS-428\B5\Library\PackageCache\com.unity.multiplayer-hlapi@1.0.2\Editor\Tools\Weaver\Helpers.cs
-C:\Users\chris\Desktop\CS-428\B5\Library\PackageCache\com.unity.multiplayer-hlapi@1.0.2\Editor\Tools\Weaver\MessageClassProcessor.cs
-C:\Users\chris\Desktop\CS-428\B5\Library\PackageCache\com.unity.multiplayer-hlapi@1.0.2\Editor\Tools\Weaver\MonoBehaviourProcessor.cs
-C:\Users\chris\Desktop\CS-428\B5\Library\PackageCache\com.unity.multiplayer-hlapi@1.0.2\Editor\Tools\Weaver\Program.cs
-C:\Users\chris\Desktop\CS-428\B5\Library\PackageCache\com.unity.multiplayer-hlapi@1.0.2\Editor\Tools\Weaver\SyncListStructProcessor.cs
-C:\Users\chris\Desktop\CS-428\B5\Library\PackageCache\com.unity.multiplayer-hlapi@1.0.2\Editor\Tools\Weaver\UNetBehaviourProcessor.cs
-C:\Users\chris\Desktop\CS-428\B5\Library\PackageCache\com.unity.multiplayer-hlapi@1.0.2\Editor\Tools\Weaver\UNetWeaver.cs
+"Assets\Core\Libraries\RootMotion\FinalIK\_DEMOS\Limb IK\Scripts\Limb IK Bend Goal\Editor\BendGoalInspector.cs"
+"Assets\Core\Libraries\RootMotion\FinalIK\_DEMOS\Shared\Scripts\Aim Poser\Editor\AimPoserInspector.cs"
+Assets\Core\Libraries\RootMotion\FinalIK\BipedIK\Editor\BipedIKInspector.cs
+Assets\Core\Libraries\RootMotion\FinalIK\BipedIK\Editor\BipedIKSolversInspector.cs
+Assets\Core\Libraries\RootMotion\FinalIK\Constraints\Editor\ConstraintsInspector.cs
+"Assets\Core\Libraries\RootMotion\FinalIK\IK Components\Editor\AimIKInspector.cs"
+"Assets\Core\Libraries\RootMotion\FinalIK\IK Components\Editor\CCDIKInspector.cs"
+"Assets\Core\Libraries\RootMotion\FinalIK\IK Components\Editor\FABRIKInspector.cs"
+"Assets\Core\Libraries\RootMotion\FinalIK\IK Components\Editor\FABRIKRootInspector.cs"
+"Assets\Core\Libraries\RootMotion\FinalIK\IK Components\Editor\FullBodyBipedIKInspector.cs"
+"Assets\Core\Libraries\RootMotion\FinalIK\IK Components\Editor\IKInspector.cs"
+"Assets\Core\Libraries\RootMotion\FinalIK\IK Components\Editor\LimbIKInspector.cs"
+"Assets\Core\Libraries\RootMotion\FinalIK\IK Components\Editor\LookAtIKInspector.cs"
+"Assets\Core\Libraries\RootMotion\FinalIK\IK Components\Editor\TrigonometricIKInspector.cs"
+"Assets\Core\Libraries\RootMotion\FinalIK\IK Solvers\Editor\IKEffectorInspector.cs"
+"Assets\Core\Libraries\RootMotion\FinalIK\IK Solvers\Editor\IKSolverAimInspector.cs"
+"Assets\Core\Libraries\RootMotion\FinalIK\IK Solvers\Editor\IKSolverFABRIKRootInspector.cs"
+"Assets\Core\Libraries\RootMotion\FinalIK\IK Solvers\Editor\IKSolverFullBodyBipedInspector.cs"
+"Assets\Core\Libraries\RootMotion\FinalIK\IK Solvers\Editor\IKSolverFullBodyInspector.cs"
+"Assets\Core\Libraries\RootMotion\FinalIK\IK Solvers\Editor\IKSolverHeuristicInspector.cs"
+"Assets\Core\Libraries\RootMotion\FinalIK\IK Solvers\Editor\IKSolverInspector.cs"
+"Assets\Core\Libraries\RootMotion\FinalIK\IK Solvers\Editor\IKSolverLimbInspector.cs"
+"Assets\Core\Libraries\RootMotion\FinalIK\IK Solvers\Editor\IKSolverLookAtInspector.cs"
+"Assets\Core\Libraries\RootMotion\FinalIK\IK Solvers\Editor\IKSolverTrigonometricInspector.cs"
+Assets\Core\Libraries\RootMotion\FinalIK\InteractionSystem\Editor\InteractionTargetInspector.cs
+"Assets\Core\Libraries\RootMotion\FinalIK\Rotation Limits\Editor\RotationLimitAngleInspector.cs"
+"Assets\Core\Libraries\RootMotion\FinalIK\Rotation Limits\Editor\RotationLimitHingeInspector.cs"
+"Assets\Core\Libraries\RootMotion\FinalIK\Rotation Limits\Editor\RotationLimitInspector.cs"
+"Assets\Core\Libraries\RootMotion\FinalIK\Rotation Limits\Editor\RotationLimitPolygonalInspector.cs"
+"Assets\Core\Libraries\RootMotion\FinalIK\Rotation Limits\Editor\RotationLimitSplineInspector.cs"
+Assets\Core\Libraries\RootMotion\Scripts\Editor\BipedReferencesInspector.cs
+Assets\Core\Libraries\RootMotion\Scripts\Editor\Inspector.cs
+Assets\Core\Libraries\RootMotion\Scripts\Editor\SerializedContent.cs
+Assets\Core\Scripts\IK\Editor\CrossfadeFBBIKInspector.cs
+Assets\Core\Scripts\IK\Editor\CrossfadeLookAtIKInspector.cs
