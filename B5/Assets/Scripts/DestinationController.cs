@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 
 public class DestinationController : MonoBehaviour
 {
@@ -20,7 +21,13 @@ public class DestinationController : MonoBehaviour
 
                 agent.SetDestination(hit.point);
             }
-
         }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+
+
     }
 }
