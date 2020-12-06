@@ -22,8 +22,6 @@ public class DialogueManager : MonoBehaviour
 
     public Canvas dialogueWindow;
     public Canvas dialogueWindowHacker;
-    public Canvas gameOverScreen;
-    public Canvas gameOverScreenWin;
 
     private string EVIL_TEXT_NODE0 = "I am Dr Evil and I have rigged a binary bomb that will blow up this entire game unless my demands are met!";
     private string EVIL_TEXT_NODE1 = "No no no, dont press that but- \n\n *Bomb explodes, you lose.";
@@ -65,8 +63,6 @@ public class DialogueManager : MonoBehaviour
     {
         dialogueWindow.enabled = false;
         dialogueWindowHacker.enabled = false;
-        gameOverScreen.enabled = false;
-        gameOverScreenWin.enabled = false;
     }
 
 
@@ -78,8 +74,6 @@ public class DialogueManager : MonoBehaviour
 
         EvilPrinter();
         HackerPrinter();
-        gameOver();
-        gameOverWin();
 
         if (distanceToEvil <= 2.5f)
         {
@@ -93,22 +87,6 @@ public class DialogueManager : MonoBehaviour
         {
             dialogueWindow.enabled = false;
             dialogueWindowHacker.enabled = false;
-        }
-    }
-
-    void gameOverWin()
-    {
-        if (Arc.ArcGetter() == 5 || Arc.ArcGetter() == 13 || Arc.ArcGetter() == 12 || Arc.ArcGetter() == 7)
-        {
-            gameOverScreenWin.enabled = true;
-        }
-    }
-
-    void gameOver()
-    {
-        if(Arc.ArcGetter() == 1 || Arc.ArcGetter() == 4 || Arc.ArcGetter() == 9 || Arc.ArcGetter() == 11)
-        {
-            gameOverScreen.enabled = true;
         }
     }
 
