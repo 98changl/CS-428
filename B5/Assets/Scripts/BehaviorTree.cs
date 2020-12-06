@@ -13,14 +13,12 @@ public class BehaviorTree : MonoBehaviour
     public GameObject coin;
     public Transform Spawn1, Spawn2, Spawn3;
 
-    public GameObject coinParent;
     public DialogueManager dialogue;
 
     //IK related interface
     //public InteractionObject bomb;
     //public FullBodyBipedEffector leftHand;
     //public FullBodyBipedEffector rightHand;
-
 
     public int input = 0;
 
@@ -249,6 +247,7 @@ public class BehaviorTree : MonoBehaviour
         return new Sequence(
                 CheckHackerArc(),
                 MakeCoins(),
+                WaitForCoins(),
                 WaitForInput(),
                 new LeafInvoke(() =>
                 {
@@ -427,16 +426,10 @@ public class BehaviorTree : MonoBehaviour
     {
         return new DecoratorInvert(
                 new DecoratorLoop(
-                    new Sequence(
-                        new LeafInvoke(
-                            () =>
-                            {
-                                coins = 3;
-                            } 
-                        ),
+                    new SequenceParallel(
                         new LeafInvoke(
                             () => {
-                                if (coins >= 3)
+                                if (GameObject.Find("Coin(Clone)") == null)
                                 {
                                     return RunStatus.Failure;
                                 }
@@ -446,7 +439,18 @@ public class BehaviorTree : MonoBehaviour
                                 }
                             }
                         ),
-                        new LeafInvoke(() => Debug.Log("Coins: " + coins))
+                        new LeafInvoke(
+                            () => {
+                                if (input == 5)
+                                {
+                                    return RunStatus.Failure;
+                                }
+                                else
+                                {
+                                    return RunStatus.Running;
+                                }
+                            }
+                        )
                     )
                 )
             );
