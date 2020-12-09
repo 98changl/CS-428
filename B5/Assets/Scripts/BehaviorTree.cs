@@ -14,6 +14,8 @@ public class BehaviorTree : MonoBehaviour
     public Transform Spawn1, Spawn2, Spawn3;
 
     public DialogueManager dialogue;
+    public Canvas gameOverScreen;
+    public Canvas gameOverScreenWin;
 
     //IK related interface
     //public InteractionObject bomb;
@@ -197,6 +199,12 @@ public class BehaviorTree : MonoBehaviour
     {
         return new Sequence(
                 CheckStartArc(),
+                new LeafInvoke(
+                    () =>
+                    {
+                        gameOverScreen.enabled = false;
+                        gameOverScreenWin.enabled = false;
+                    }),
                 WaitForInput(),
                 new Selector(
                     ButtonArc(),
@@ -281,7 +289,8 @@ public class BehaviorTree : MonoBehaviour
     {
         return new Sequence(
                 CheckPickpocketArc(),
-                WaitForInput()
+                WaitForApproach(),
+                GameOverWin()
                 );
     }
 
@@ -360,7 +369,7 @@ public class BehaviorTree : MonoBehaviour
     {
         return new Sequence(
                 CheckWinDefuseArc(),
-                GameOver()
+                GameOverWin()
                 );
     }
 
@@ -368,7 +377,7 @@ public class BehaviorTree : MonoBehaviour
     {
         return new Sequence(
                 CheckDeliverArc(),
-                GameOver()
+                GameOverWin()
                 );
     }
 
@@ -407,8 +416,18 @@ public class BehaviorTree : MonoBehaviour
     private Node GameOver()
     {
         return new Sequence(
-            //new LeafInvoke(() => Time.timeScale = 0f),
-            new LeafInvoke(() => { return RunStatus.Running; })
+            new LeafInvoke(() => gameOverScreen.enabled = true),
+            new LeafInvoke(() => Time.timeScale = 0f)
+            
+            );
+    }
+
+    private Node GameOverWin()
+    {
+        return new Sequence(
+            new LeafInvoke(() => gameOverScreenWin.enabled = true),
+            new LeafInvoke(() => Time.timeScale = 0f)
+            
             );
     }
 
