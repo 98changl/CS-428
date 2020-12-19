@@ -4,21 +4,17 @@ using UnityEngine;
 
 public class CamCont : MonoBehaviour
 {
-    GameObject player;
-    Vector3 camOffset;
-    public int x;
-    public int y;
-    public int z;
+    public Transform target;
 
-    private void Start()
-    {
-        player = GameObject.Find("Player");
-        
-    }
+    public float smoothSpeed = 0.125f;
+    public Vector3 offset;
 
-    private void Update()
+    void FixedUpdate()
     {
-        camOffset = new Vector3(x, y, z);
-        transform.position = player.transform.position + camOffset;
+        Vector3 desiredPosition = target.position + offset;
+        Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed);
+        transform.position = smoothedPosition;
+
+        transform.LookAt(target);
     }
 }

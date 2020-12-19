@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3384379894515997203}
   - component: {fileID: -3976681165400007900}
   m_Layer: 0
-  m_Name: DynamicObst
+  m_Name: DynamicObst1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -106,7 +106,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 55
   ForwardX: 0
-  ForwardY: 0
+  ForwardY: 1
   ForwardZ: 0
   ReverseX: 0
   ReverseY: 0
