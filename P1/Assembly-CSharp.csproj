@@ -64,6 +64,7 @@
   <ItemGroup>
     <Compile Include="Assets\Multiplayer (Group2)\Scripts\CameraController.cs" />
     <Compile Include="Assets\Multiplayer (Group2)\Scripts\GameInitializer.cs" />
+    <Compile Include="Assets\Multiplayer (Group2)\Scripts\LoadMultiplayerMenu.cs" />
     <Compile Include="Assets\Multiplayer (Group2)\Scripts\LobbyStarter.cs" />
     <Compile Include="Assets\Multiplayer (Group2)\Scripts\NetworkScript.cs" />
     <Compile Include="Assets\Multiplayer (Group2)\Scripts\PlayerController.cs" />
