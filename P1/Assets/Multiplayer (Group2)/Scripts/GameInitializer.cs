@@ -9,7 +9,9 @@ public class GameInitializer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PhotonPlayer"), Vector3.zero, Quaternion.identity);
+        float x = Random.Range(-5f, 5f);
+        float z = Random.Range(-5f, 5f);
+        PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PhotonPlayer"), new Vector3(x,1,z), Quaternion.identity);
     }
 
 }

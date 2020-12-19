@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class LobbyStarter : MonoBehaviourPunCallbacks
 {
@@ -53,6 +54,11 @@ public class LobbyStarter : MonoBehaviourPunCallbacks
     {
         error.text = "Failed to create room";
         error.enabled = true;
+    }
+
+    public void BackButton()
+    {
+        SceneManager.LoadScene(sceneBuildIndex: 0);
     }
 
 }
