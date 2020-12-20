@@ -26,6 +26,9 @@ public class PlayerController : MonoBehaviourPunCallbacks
             GetComponentInChildren<Camera>().enabled = false;
             GetComponentInChildren<AudioListener>().enabled = false;
         }
+
+        this.name = "Player" + photonView.ViewID;
+
     }
 
     // Update is called once per frame
