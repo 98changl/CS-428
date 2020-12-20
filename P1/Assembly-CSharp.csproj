@@ -310,6 +310,7 @@
     <Compile Include="Assets\Photon\Simple\Utilities\SimpleDocsURLS.cs" />
     <Compile Include="Assets\Photon\Simple\Utilities\SmartVars\SmartVars.cs" />
     <Compile Include="Assets\SinglePlayer\Scripts\CamCont.cs" />
+    <Compile Include="Assets\SinglePlayer\Scripts\DynamicObstacle.cs" />
     <Compile Include="Assets\SinglePlayer\Scripts\MovementController.cs" />
     <Compile Include="Assets\SinglePlayer\Scripts\Rotator.cs" />
     <None Include="Assets\Photon\PhotonLibs\netstandard2.0\Photon3Unity3D.xml" />

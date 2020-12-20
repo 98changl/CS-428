@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class MovementController : MonoBehaviour
 {
-    public float speed;
-    public float jumpForce = 5f;
+    public float speed = 10;
+    public float jumpForce = 6f;
     public bool onGround;
     private Rigidbody rb;
 
@@ -17,51 +17,25 @@ public class MovementController : MonoBehaviour
 
     }
 
-    private void Update()
-    {
-        moveObstacle();
-    }
 
     //Update is called once per frame
-    //void FixedUpdate()
-    //{
-    //    float moveHorizontal = Input.GetAxis("Horizontal");
-    //    float moveVertical = Input.GetAxis("Vertical");
-
-    //    Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
-    //    rb.AddForce(movement * speed);
-    //
-    //  if( Input.GetButton("Jump") && onGround == true)
-    //{
-    //   rb.velocity = new Vector3(0.0f, jumpForce, 0.0f);
-    //    onGround = false;
-    //   }
-    // }
-
-    void moveObstacle()
+    void FixedUpdate()
     {
-        if (Input.GetKey(KeyCode.UpArrow))
-        {
-            transform.Translate(Vector3.forward * Time.deltaTime * speed);
-        }
-        if (Input.GetKey(KeyCode.LeftArrow))
-        {
-            transform.Translate(Vector3.left * Time.deltaTime * speed);
-        }
-        if (Input.GetKey(KeyCode.RightArrow))
-        {
-            transform.Translate(Vector3.right * Time.deltaTime * speed);
-        }
-        if (Input.GetKey(KeyCode.DownArrow))
-        {
-            transform.Translate(Vector3.back * Time.deltaTime * speed);
-        }
+        float moveHorizontal = Input.GetAxis("Horizontal") * Time.deltaTime * speed;
+        float moveVertical = Input.GetAxis("Vertical") * Time.deltaTime * speed;
 
+        transform.Translate(moveHorizontal, 0.0f, moveVertical);
+        
+        if (Input.GetButton("Jump") && onGround == true)
+        {
+            rb.velocity = new Vector3(0.0f, jumpForce, 0.0f);
+            onGround = false;
+        }
     }
 
     private void OnCollisionEnter(Collision other)
     {
-        if (other.gameObject.CompareTag("ground"))
+        if (other.gameObject.CompareTag("ground") || other.gameObject.CompareTag("plataform"))
         {
             onGround = true;
         }

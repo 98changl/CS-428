@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3384379894515997204}
   - component: {fileID: 3384379894515997203}
   - component: {fileID: -3976681165400007900}
+  - component: {fileID: 3885939440828965337}
   m_Layer: 0
   m_Name: DynamicObst2
   m_TagString: Untagged
@@ -111,3 +112,19 @@ MonoBehaviour:
   ReverseX: 0
   ReverseY: 1
   ReverseZ: 0
+--- !u!208 &3885939440828965337
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3384379894515997201}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5

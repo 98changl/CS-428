@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Bullet
   - ground
+  - plataform
+  - player
+  - wall
   layers:
   - Default
   - TransparentFX
