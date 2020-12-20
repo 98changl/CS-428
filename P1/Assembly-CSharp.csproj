@@ -64,12 +64,14 @@
   <ItemGroup>
     <Compile Include="Assets\Multiplayer (Group2)\Scripts\CameraController.cs" />
     <Compile Include="Assets\Multiplayer (Group2)\Scripts\GameInitializer.cs" />
+    <Compile Include="Assets\Multiplayer (Group2)\Scripts\GameStateManager.cs" />
     <Compile Include="Assets\Multiplayer (Group2)\Scripts\LoadMultiplayerMenu.cs" />
     <Compile Include="Assets\Multiplayer (Group2)\Scripts\LobbyStarter.cs" />
     <Compile Include="Assets\Multiplayer (Group2)\Scripts\NetworkScript.cs" />
     <Compile Include="Assets\Multiplayer (Group2)\Scripts\PlayerController.cs" />
     <Compile Include="Assets\Multiplayer (Group2)\Scripts\RoomController.cs" />
     <Compile Include="Assets\Multiplayer (Group2)\Scripts\StartController.cs" />
+    <Compile Include="Assets\Multiplayer (Group2)\Scripts\Tagging.cs" />
     <Compile Include="Assets\Photon\PhotonChat\Demos\Common\EventSystemSpawner.cs" />
     <Compile Include="Assets\Photon\PhotonChat\Demos\Common\OnStartDelete.cs" />
     <Compile Include="Assets\Photon\PhotonChat\Demos\Common\TextButtonTransition.cs" />
