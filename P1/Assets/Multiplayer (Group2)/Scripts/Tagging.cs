@@ -9,39 +9,78 @@ public class Tagging : MonoBehaviour
     public Renderer agentColor;
     public GameObject self;
 
+    //public float score;
     public bool tagged;
-    public float score;
 
     private bool canBeTagged;
-    private float tagDelay = 2f;
-    
+    private float tagDelay = 3f;
+
+    Animator animator;
+    CharacterController Controller;
+
     // Start is called before the first frame update
     void Start()
     {
-        tagged = false;
+        animator = GetComponent<Animator>();
+        Controller = GetComponent<CharacterController>();
+        //tagged = false;
         canBeTagged = true;
+        //WaitForTagAbility();
         //self.parent = GameObject.Find("PlayerManager");
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        //UpdateStatus();
+        if (animator.GetBool("isClicked"))
+        {
+            GetComponent<CapsuleCollider>().radius = 0.6f;
+        }
+        else
+        {
+            GetComponent<CapsuleCollider>().radius = 0.22f;
+        }
+    }
+
+    private void UpdateStatus()
+    {
+        if (tagged == true)
+        {
+            agentColor.material = agentIsIt;
+        }
+        else
+        {
+            agentColor.material = agentIsNotIt;
+        }
+    }
+
+    public void SetTag(bool tag)
+    {
+        tagged = tag;
+        UpdateStatus();
+    }
+
+    public bool GetTag()
+    {
+        return tagged;
     }
 
     public void OnTriggerEnter(Collider other)
     {
+        Debug.Log("Trigger");
         if (other.gameObject.tag == "Player" && canBeTagged == true)
         {
+            Debug.Log("Player Trigger");
             if (tagged == false)
             {
                 tagged = true;
-                agentColor.material = agentIsIt;
+                UpdateStatus();
             }
             else
             {
                 tagged = false;
-                agentColor.material = agentIsNotIt;
+                UpdateStatus();
             }
 
             canBeTagged = false;
@@ -56,7 +95,24 @@ public class Tagging : MonoBehaviour
 
     public void OnCollisionEnter(Collision collision)
     {
-        
+        Debug.Log("Collision");
+        if (collision.gameObject.tag == "Player" && canBeTagged == true)
+        {
+            Debug.Log("Player Collision");
+            if (tagged == false)
+            {
+                tagged = true;
+                UpdateStatus();
+            }
+            else
+            {
+                tagged = false;
+                UpdateStatus();
+            }
+
+            canBeTagged = false;
+            StartCoroutine(WaitForTagAbility());
+        }
     }
 
     public void OnCollisionExit(Collision collision)
@@ -64,9 +120,10 @@ public class Tagging : MonoBehaviour
         
     }
 
-    public IEnumerator WaitForTagAbility()
+    private IEnumerator WaitForTagAbility()
     {
         yield return new WaitForSeconds(tagDelay);
+        Debug.Log("Can tag again");
         canBeTagged = true;
     }
 }
