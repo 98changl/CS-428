@@ -12,71 +12,82 @@ public class AI : MonoBehaviour
     public int minDistance = 5;
     public int safeDistance = 60;
 
-    private enum AIstates { Idle, Seek, Flee, Arrive, Pursuit, Evade}
+    public enum AIstates { Idle, Seek, Flee, Arrive, Pursuit, Evade}
 
-    private AIstates currentState;
+    public AIstates currentState;
 
     // Start is called before the first frame update
     void Start()
     {
-        currentState = AIstates.Pursuit;
+        //currentState = AIstates.Idle;
+        //currentState = AIstates.Seek;
+        // currentState = AIstates.Flee;
+        //currentState = AIstates.Arrive;
+        //currentState = AIstates.Pursuit;
+        currentState = AIstates.Evade;
         agent = this.GetComponent<NavMeshAgent>();
         
     }
 
-    private void Update()
-    {
-        Seek();
-    }
-
-    // Update is called once per frame
-    //void Update()
+    //private void Update()
     //{
-    //    switch (currentState)
-    //    {
-    //        case AIstates.Idle:
-    //            break;
-    //        case AIstates.Seek:
-    //            Seek();
-    //            break;
-    //        case AIstates.Flee:
-    //            Flee();
-    //            break;
-    //        case AIstates.Arrive:
-    //            Arrive();
-    //            break;
-    //        case AIstates.Pursuit:
-    //            Pursuit();
-    //            break;
-    //        case AIstates.Evade:
-    //            Evade();
-    //            break;
-    //    }
+    //    Seek();
     //}
 
-    void Seek()
+    // Update is called once per frame
+    void Update()
     {
-        Vector3 targetVector = target.transform.position;
-        agent.SetDestination(targetVector);
- 
+        switch (currentState)
+        {
+            case AIstates.Idle:
+                Debug.Log("Idle");
+                break;
+            case AIstates.Seek:
+                Seek();
+                Debug.Log("Seek");
+                break;
+            case AIstates.Flee:
+                Flee();
+                Debug.Log("Flee");
+                break;
+            case AIstates.Arrive:
+                Arrive();
+                Debug.Log("Arrive");
+                break;
+            case AIstates.Pursuit:
+                Pursuit();
+                Debug.Log("Pursuit");
+                break;
+            case AIstates.Evade:
+                Evade();
+                Debug.Log("Evade");
+                break;
+        }
     }
 
     //void Seek()
     //{
-    //    Vector3 direction = target.position - transform.position;
-    //    direction.y = 0;
+    //    Vector3 targetVector = target.transform.position;
+    //    agent.SetDestination(targetVector);
 
-    //    transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), rotSpeed * Time.deltaTime);
-
-    //    if (direction.magnitude > minDistance)
-    //    {
-
-    //        Vector3 moveVector = direction.normalized * movSpeed * Time.deltaTime;
-
-    //        transform.position += moveVector;
-
-    //    }
     //}
+
+    void Seek()
+    {
+        Vector3 direction = target.position - transform.position;
+        direction.y = 0;
+
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), rotSpeed * Time.deltaTime);
+
+        if (direction.magnitude > minDistance)
+        {
+
+            Vector3 moveVector = direction.normalized * movSpeed * Time.deltaTime;
+
+            transform.position += moveVector;
+
+        }
+    }
 
     void Flee()
     {
@@ -133,7 +144,7 @@ public class AI : MonoBehaviour
 
     void Evade()
     {
-        int iterationAhead = 30;
+        int iterationAhead = 15;
 
         var targetSpeed = target.gameObject.GetComponent<MovementController>().instantVelocity;
 
