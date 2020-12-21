@@ -666,9 +666,12 @@ GameObject:
   - component: {fileID: 3855380820403356369}
   - component: {fileID: 3855380820403356368}
   - component: {fileID: 3855380820403356375}
+  - component: {fileID: 960182821937155316}
+  - component: {fileID: 2555903473801860918}
+  - component: {fileID: 428773762780709587}
   m_Layer: 0
   m_Name: PhotonPlayer
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -735,9 +738,9 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1955695768366021739}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 0.2
+  m_Radius: 0.22
   m_Height: 0.7
   m_Direction: 1
   m_Center: {x: 0, y: 0.15, z: 0}
@@ -827,11 +830,73 @@ MonoBehaviour:
     SynchronizeType: 2
     Name: Jump Blend
   - Type: 4
-    SynchronizeType: 0
+    SynchronizeType: 2
     Name: isClicked
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0
+--- !u!114 &960182821937155316
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1955695768366021739}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76704ae4e2940d64c861660ab1104687, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agentIsNotIt: {fileID: 2100000, guid: b6756628ff107694f8ab70d9865745b0, type: 2}
+  agentIsIt: {fileID: 2100000, guid: 6dfd94a8c3c140c4b86bd75b505ea62e, type: 2}
+  agentColor: {fileID: 428773762780709587}
+  self: {fileID: 0}
+  tagged: 0
+--- !u!33 &2555903473801860918
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1955695768366021739}
+  m_Mesh: {fileID: 4300096, guid: cbb67ab5509bfe24dba7db2d65a9632f, type: 3}
+--- !u!23 &428773762780709587
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1955695768366021739}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: b6756628ff107694f8ab70d9865745b0, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
 --- !u!1 &1955695768366021741
 GameObject:
   m_ObjectHideFlags: 0
