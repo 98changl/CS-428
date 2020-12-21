@@ -67,6 +67,7 @@
     <Compile Include="Assets\Multiplayer (Group2)\Scripts\GameStateManager.cs" />
     <Compile Include="Assets\Multiplayer (Group2)\Scripts\LoadMultiplayerMenu.cs" />
     <Compile Include="Assets\Multiplayer (Group2)\Scripts\LobbyStarter.cs" />
+    <Compile Include="Assets\Multiplayer (Group2)\Scripts\MovingObstacle.cs" />
     <Compile Include="Assets\Multiplayer (Group2)\Scripts\NetworkScript.cs" />
     <Compile Include="Assets\Multiplayer (Group2)\Scripts\PlayerController.cs" />
     <Compile Include="Assets\Multiplayer (Group2)\Scripts\RoomController.cs" />
