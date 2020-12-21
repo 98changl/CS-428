@@ -87,7 +87,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
         animator.SetFloat("x", LeftRight, .1f, Time.deltaTime);
         animator.SetFloat("y", ForwardBackward * 0.5f * speed, .1f, Time.deltaTime);
 
-        Debug.Log(ForwardBackward);
+        //Debug.Log(ForwardBackward);
 
         Vector3 Movement = new Vector3(LeftRight, 0, ForwardBackward);
         Movement *= speed;
