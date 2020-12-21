@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class MovementController : MonoBehaviour
 {
+    public Vector3 instantVelocity;
     public float speed = 10;
     public float jumpForce = 6f;
     public bool onGround;
@@ -14,13 +15,14 @@ public class MovementController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         onGround = true;
-
+        instantVelocity = Vector3.zero;
     }
 
 
     //Update is called once per frame
     void FixedUpdate()
     {
+        Vector3 pos = transform.position;
         float moveHorizontal = Input.GetAxis("Horizontal") * Time.deltaTime * speed;
         float moveVertical = Input.GetAxis("Vertical") * Time.deltaTime * speed;
 
@@ -31,6 +33,11 @@ public class MovementController : MonoBehaviour
             rb.velocity = new Vector3(0.0f, jumpForce, 0.0f);
             onGround = false;
         }
+
+        instantVelocity = transform.position - pos;
+
+        // Debug.Log("instant vel: " + instantVelocity);
+
     }
 
     private void OnCollisionEnter(Collision other)
