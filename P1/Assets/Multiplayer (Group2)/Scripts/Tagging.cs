@@ -13,7 +13,7 @@ public class Tagging : MonoBehaviour
     public bool tagged;
 
     private bool canBeTagged;
-    private float tagDelay = 3f;
+    private float tagDelay = 2f;
 
     Animator animator;
     CharacterController Controller;
@@ -24,8 +24,8 @@ public class Tagging : MonoBehaviour
         animator = GetComponent<Animator>();
         Controller = GetComponent<CharacterController>();
         //tagged = false;
-        canBeTagged = true;
-        //WaitForTagAbility();
+        canBeTagged = false;
+        StartCoroutine(WaitForTagAbility());
         //self.parent = GameObject.Find("PlayerManager");
     }
 

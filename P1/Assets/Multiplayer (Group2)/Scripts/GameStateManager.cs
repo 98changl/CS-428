@@ -17,6 +17,8 @@ public class GameStateManager : MonoBehaviour, IOnEventCallback
     private Text timerText;
     private Text player1;
     private Text player2;
+    private Text gameOver;
+    private Text winnerText;
     
     private Coroutine timerCoroutine;
     private Coroutine scoreCoroutine;
@@ -26,10 +28,10 @@ public class GameStateManager : MonoBehaviour, IOnEventCallback
     public enum EventCodes : byte
     {
         Wildcard,
-        NewPlayer,
         RefreshTimer,
         UpdatePlayers,
-        UpdateScore
+        UpdateScore,
+        GameOver
     }
 
     // Start is called before the first frame update
@@ -114,21 +116,11 @@ public class GameStateManager : MonoBehaviour, IOnEventCallback
         timerText = GameObject.Find("Canvas/TimerText").GetComponent<Text>();
         player1 = GameObject.Find("Canvas/player1").GetComponent<Text>();
         player2 = GameObject.Find("Canvas/player2").GetComponent<Text>();
-    }
 
-    private void GameOver()
-    {
-        // update the timer
-        if (timerCoroutine != null) StopCoroutine(timerCoroutine);
-        currentMatchTime = 0;
-        RefreshTimerUI();
-
-        // update the score
-        if (scoreCoroutine != null) StopCoroutine(scoreCoroutine);
-
-
-        // stop the game
-
+        gameOver = GameObject.Find("Canvas/GameOverText").GetComponent<Text>();
+        gameOver.text = "";
+        winnerText = GameObject.Find("Canvas/Winner").GetComponent<Text>();
+        winnerText.text = "";
     }
 
     #region UpdatePlayers
@@ -272,7 +264,7 @@ public class GameStateManager : MonoBehaviour, IOnEventCallback
         if (currentMatchTime <= 0)
         {
             timerCoroutine = null;
-            GameOver();
+            GameOver_Send();
         }
         else
         {
@@ -365,6 +357,61 @@ public class GameStateManager : MonoBehaviour, IOnEventCallback
 
     #endregion
 
+    #region GameOver
+
+    private void GameOver()
+    {
+        // update the timer
+        if (timerCoroutine != null) StopCoroutine(timerCoroutine);
+        currentMatchTime = 0;
+        RefreshTimerUI();
+
+        // update the score
+        if (scoreCoroutine != null) StopCoroutine(scoreCoroutine);
+        UpdateScoreUI();
+
+        // game over text
+        gameOver.text = "Game Over";
+        //winnerText.SetActive(true);
+        if (scoreA == scoreB)
+        {
+            winnerText.text = "The game is a tie as both players have " + scoreA + " points!";
+        }
+        else if (scoreA > scoreB)
+        {
+            winnerText.text = "The winner is Player 1 with " + scoreA + " points!";
+        }
+        else
+        {
+            winnerText.text = "The winner is Player 2 with " + scoreB + " points!";
+        }
+        
+        // stop the game
+        StartCoroutine(WaitForExit());
+    }
+
+    public void GameOver_Send()
+    {
+        object[] content = new object[] { scoreA, scoreB };
+        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
+        bool result = PhotonNetwork.RaiseEvent((byte)EventCodes.GameOver, content, raiseEventOptions, SendOptions.SendReliable);
+    }
+
+    public void GameOver_Read(object[] data)
+    {
+        scoreA = (int)data[0];
+        scoreB = (int)data[1];
+        GameOver();
+    }
+
+    private IEnumerator WaitForExit()
+    {
+        yield return new WaitForSeconds(5f);
+        SceneManager.LoadScene("MultiplayerMenu");
+    }
+
+    #endregion
+
     void IOnEventCallback.OnEvent(EventData photonEvent)
     {
         if (photonEvent.Code >= 200) return;
@@ -375,9 +422,6 @@ public class GameStateManager : MonoBehaviour, IOnEventCallback
 
         switch (e)
         {
-            case EventCodes.NewPlayer:
-                //NewPlayer_Read(data);
-                break;
             case EventCodes.RefreshTimer:
                 RefreshTimer_Read(data);
                 break;
@@ -386,6 +430,9 @@ public class GameStateManager : MonoBehaviour, IOnEventCallback
                 break;
             case EventCodes.UpdateScore:
                 UpdateScore_Read(data);
+                break;
+            case EventCodes.GameOver:
+                GameOver_Read(data);
                 break;
         }
     }
