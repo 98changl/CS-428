@@ -27,7 +27,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
             GetComponentInChildren<AudioListener>().enabled = false;
         }
 
-        this.name = "Player" + photonView.ViewID;
+        //this.name = "Player" + photonView.ViewID;
 
     }
 

@@ -7,23 +7,8 @@ using ExitGames.Client.Photon;
 using Photon.Realtime;
 using Photon.Pun;
 
-public class PlayerData
-{
-    public int ID;
-    public bool tagged;
-
-    public PlayerData (int i, bool t)
-    {
-        this.ID = i;
-        this.tagged = t;
-    }
-}
-
 public class GameStateManager : MonoBehaviour, IOnEventCallback
 {
-    public List<PlayerData> playerData = new List<PlayerData>();
-    public int index;
-
     public int matchLength = 120;
     public int currentMatchTime;
     public int scoreA;
@@ -65,9 +50,6 @@ public class GameStateManager : MonoBehaviour, IOnEventCallback
     // Update is called once per frame
     void Update()
     {
-        //Tagging tag = (Tagging)hostPlayer.GetComponent(typeof(Tagging));
-        //UpdatePlayerModels();
-        
         if (PhotonNetwork.IsMasterClient)
         {
             if (PhotonNetwork.CurrentRoom.PlayerCount > 1 && joined == false)
@@ -148,38 +130,6 @@ public class GameStateManager : MonoBehaviour, IOnEventCallback
         // stop the game
 
     }
-    /*
-    public void NewPlayer_Send(PlayerData p)
-    {
-        object[] content = new object[2];
-
-        content[0] = PhotonNetwork.LocalPlayer.ActorNumber;
-        content[1] = false;
-
-        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.MasterClient };
-        PhotonNetwork.RaiseEvent((byte)EventCodes.NewPlayer, content, raiseEventOptions, SendOptions.SendReliable);
-    }
-
-    public void NewPlayer_Read(object[] data)
-    {
-        PlayerData p = new PlayerData((int)data[0], (bool)data[1]);
-        playerData.Add(p);
-        UpdatePlayers_Send();
-        UpdateScore_Send();
-    }
-    
-    public void UpdatePlayerModels()
-    {
-        foreach(GameObject player in GameObject.FindGameObjectsWithTag("Player"))
-        {
-            if (player.name == "PhotonPlayer(Clone)")
-            {
-                PhotonView view = (PhotonView)player.GetComponent(typeof(PhotonView));
-                Debug.Log(view.IsMine);
-            }
-        }
-    }
-    */
 
     #region UpdatePlayers
 

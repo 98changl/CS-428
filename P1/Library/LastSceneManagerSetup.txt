@@ -1,5 +1,5 @@
 sceneSetups:
-- path: Assets/SinglePlayer/_Scene/SampleScene.unity
+- path: Assets/Multiplayer (Group2)/Scenes/ChaseMap1.unity
   isLoaded: 1
   isActive: 1
   isSubScene: 0
