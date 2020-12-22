@@ -309,6 +309,7 @@
      <Compile Include="Assets\SinglePlayer\Scripts\AI_controller.cs" />
      <Compile Include="Assets\SinglePlayer\Scripts\CamCont.cs" />
      <Compile Include="Assets\SinglePlayer\Scripts\DynamicObstacle.cs" />
+     <Compile Include="Assets\SinglePlayer\Scripts\LoadSinglePlayer.cs" />
      <Compile Include="Assets\SinglePlayer\Scripts\Move.cs" />
      <Compile Include="Assets\SinglePlayer\Scripts\MovementController.cs" />
      <Compile Include="Assets\SinglePlayer\Scripts\PointsScript.cs" />
