@@ -311,6 +311,7 @@
      <Compile Include="Assets\SinglePlayer\Scripts\DynamicObstacle.cs" />
      <Compile Include="Assets\SinglePlayer\Scripts\Move.cs" />
      <Compile Include="Assets\SinglePlayer\Scripts\MovementController.cs" />
+     <Compile Include="Assets\SinglePlayer\Scripts\PointsScript.cs" />
      <Compile Include="Assets\SinglePlayer\Scripts\Rotator.cs" />
      <Compile Include="Assets\SinglePlayer\Scripts\TagScript.cs" />
      <Compile Include="Assets\SinglePlayer\Scripts\Test.cs" />
