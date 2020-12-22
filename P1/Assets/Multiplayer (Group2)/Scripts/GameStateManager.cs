@@ -59,9 +59,24 @@ public class GameStateManager : MonoBehaviour, IOnEventCallback
                 joined = true;
                 InitializeSecondPlayer();
             }
-            //CheckForTag();
+
+            if (PhotonNetwork.CurrentRoom.PlayerCount <= 1 && joined == true)
+            {
+                GameOver_Send();
+            }
         }
+        else
+        {
+            if (PhotonNetwork.CurrentRoom.PlayerCount <= 1)
+            {
+                GameOver_Send();
+            }
+        }
+
+        
     }
+
+    #region Initialization
 
     private void OnEnable()
     {
@@ -122,6 +137,8 @@ public class GameStateManager : MonoBehaviour, IOnEventCallback
         winnerText = GameObject.Find("Canvas/Winner").GetComponent<Text>();
         winnerText.text = "";
     }
+
+    #endregion
 
     #region UpdatePlayers
 
@@ -407,6 +424,18 @@ public class GameStateManager : MonoBehaviour, IOnEventCallback
     private IEnumerator WaitForExit()
     {
         yield return new WaitForSeconds(5f);
+        PhotonNetwork.DestroyPlayerObjects(PhotonNetwork.LocalPlayer);
+        StartCoroutine(WaitForDisconnect());
+    }
+
+    private IEnumerator WaitForDisconnect()
+    {
+        PhotonNetwork.LeaveRoom();
+        while (PhotonNetwork.InRoom)
+            yield return null;
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
         SceneManager.LoadScene("MultiplayerMenu");
     }
 
