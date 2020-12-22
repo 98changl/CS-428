@@ -11,12 +11,17 @@ public class TagScript : MonoBehaviour
     private int delay = 1;
     private bool canBeTagged;
     private float tagDelay = 2f;
+
+    private AI_controller ai_states;
+
+
     // Start is called before the first frame update
     void Start()
     {
         points = 0;
         canBeTagged = false;
         StartCoroutine(WaitForTag());
+        ai_states = GetComponent<AI_controller>();
     }
 
     // Update is called once per frame
@@ -25,9 +30,13 @@ public class TagScript : MonoBehaviour
         if(isTagged)
         {
             // No points awarded
+            ai_states.currentState = AI_controller.AIstates.Pursuit;
+            gameObject.GetComponent<Renderer>().material.color = Color.yellow;
         }
         else
         {
+            gameObject.GetComponent<Renderer>().material.color = Color.blue;
+            ai_states.currentState = AI_controller.AIstates.Evade;
             time += Time.deltaTime;
             if(time >= delay)
             {
