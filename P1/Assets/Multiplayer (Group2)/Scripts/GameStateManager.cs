@@ -136,6 +136,8 @@ public class GameStateManager : MonoBehaviour, IOnEventCallback
         gameOver.text = "";
         winnerText = GameObject.Find("Canvas/Winner").GetComponent<Text>();
         winnerText.text = "";
+
+        Cursor.visible = true;
     }
 
     #endregion
